@@ -79,14 +79,12 @@ jobs:
 
       - name: Fetch + patch + build + package
         shell: cmd
-        # Run the whole pipeline inside the MozillaBuild bash environment, which
-        # provides python/mercurial/make and the correct shell for mach.
-        run: |
-          C:\mozilla-build\start-shell.bat -c "cd /c/cb && \
-            build/scripts/fetch-source.sh && \
-            build/scripts/apply-patches.sh && \
-            build/scripts/build.sh && \
-            ( [ '${{ inputs.upload_installer }}' = 'true' ] && build/scripts/package.sh || true )"
+        # Run the whole pipeline inside the MozillaBuild bash (provides
+        # python/make and the right shell for mach). Single line: cmd does not
+        # support '\' line continuation. If start-shell.bat -c is unsupported on
+        # this MozillaBuild, the fallback is to call its bundled bash directly:
+        #   C:\mozilla-build\msys2\usr\bin\bash.exe -l -c "..."
+        run: C:\mozilla-build\start-shell.bat -c "cd /c/cb && build/scripts/fetch-source.sh && build/scripts/apply-patches.sh && build/scripts/build.sh && build/scripts/package.sh"
 
       - name: Report build time + disk
         if: always()
