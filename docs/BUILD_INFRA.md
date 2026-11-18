@@ -38,6 +38,43 @@ Local development of everything else is free (this session + the repo).
 3. The maintainer's PC only ever needs enough space to **download and run the
    finished installer** (hundreds of MB), never to build.
 
+## Cost comparison (rates as of late 2026 — confirm on vendor pages)
+
+Planning assumption: a **clean** Firefox build ≈ **90 min on 8 vCPU**, **~60 min
+on 16 vCPU**. ⚠️ **This is an estimate, not measured** — the first job's real
+time sets the true cost, and `sccache` makes later incremental builds much
+faster. ESR security rebases are ~monthly, so figure **~12–15 builds/year**.
+
+| Option | Windows rate | Est. per clean build* | GitHub plan? | Setup effort | Notes |
+|--------|-------------|----------------------|--------------|-------------|-------|
+| **GitHub larger runner, 8‑core** | ~$0.042/min | **~$3.80** | **Team+ required** | Low — change `runs-on` | First-party; priciest/min; always billed (even public repos) |
+| GitHub larger runner, 16‑core | ~$0.082/min | ~$4.90 | Team+ required | Low | Faster wall-clock |
+| **WarpBuild, 8‑core** | ~$0.032/min | **~$2.90** | none | Low — sign up, set runner label | ~25% cheaper, claims ~2× faster, **$10 free credits**, no seat fee |
+| WarpBuild, ~16‑core | ~$0.064/min (est) | ~$3.80 | none | Low | |
+| Depot | Windows rate not published | ~ | none | Low | Per-second billing; check depot.dev |
+| **On-demand cloud VM** (e.g. AWS c5.4xlarge, 16 vCPU) | ~$1.36/hr Windows on-demand; spot cheaper | **~$2–3** | none | **High** — script provision/toolchain/teardown | Most control, cheapest at scale, most engineering |
+
+*Per-build = rate × est. build time. **Annual compute ≈ $45–75** at ~15
+builds/year — the real cost is **setup effort, not dollars**.
+
+### Recommendation (solo maintainer)
+1. **Start with a WarpBuild-style third-party runner.** Cheapest per minute, no
+   GitHub plan upgrade, and **$10 free credits cover the first real build at
+   ~zero cost** — which is exactly what we need to *measure* actual build time
+   and disk before committing. Wiring = sign up + change the runner label in
+   `build-windows.yml`.
+2. **GitHub larger runner** if you prefer staying first-party and are willing to
+   be on GitHub **Team** (~$4/user/mo) — larger runners aren't available on a
+   personal free account.
+3. **On-demand cloud VM** only if you want zero third-party CI and don't mind
+   scripting provisioning/teardown — cheapest at volume, most setup.
+
+### First concrete step (whichever you pick)
+Run **one** Windows build to get the real build time + disk footprint. That
+single measurement replaces every estimate above and tells us the true per-build
+cost. Everything in this repo (`fetch-source.sh` → `apply-patches.sh` →
+`build.sh` → `package.sh`) is ready to drive it.
+
 ## Status
-Deferred until the first compiled binary is needed. No decision required to
-continue Phase 2 scaffolding.
+Options compared (above). Awaiting owner's choice of runner to wire
+`build-windows.yml` and run the first measured build.
