@@ -21,7 +21,7 @@ spec §21. **No feature is listed as complete without executed tests.**
 
 ## In progress
 - Brand capture blocked on `cobal.framer.ai` being allowlisted in the session
-- Build infrastructure (B1) deferred — architect to present options before first compile
+- Build infrastructure (B1) deferred — **maintainer PC lacks 40 GB; builds will run in cloud CI, not locally.** Options documented in `BUILD_INFRA.md`; no decision needed to continue Phase 2 source work
 - Release-time blockers open: code-signing cert (B2), update server (B4)
 
 ## Not started
