@@ -56,12 +56,13 @@ magnitude for a small team** and assume the engine decision in `ARCHITECTURE.md`
 **Exit:** documented real-extension compatibility; isolated profiles.
 
 ## Phase 6 — Advanced features
-- [ ] **Privacy dashboard** (real data; toolbar + full page) — flagship
+- [~] **Privacy dashboard** (real data; toolbar + full page) — flagship — UI built (`pages/dashboard/`), engine data-binding needs build
 - [ ] Workspaces (real state over native tab groups/containers)
 - [ ] Vertical tabs (enable + restyle native)
 - [ ] Verify inherited: Reader, pdf.js, PiP, translation (Bergamot), downloads
-- [ ] Import/export + encrypted local backup module
+- [x] Import/export + encrypted local backup module — `tools/backup/` (11/11 tests)
 **Exit:** defining features working on real data.
+*Status: dashboard UI + backup module done; data-binding to the engine needs B1.*
 
 ## Phase 7 — Security & optimization
 - [ ] Security review + dependency audit

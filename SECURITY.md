@@ -7,8 +7,15 @@ documented limitations.
 ## Reporting a vulnerability
 **Please do not open a public issue for security vulnerabilities.**
 
-Report privately to: **security@cybrsoft.example** *(placeholder — set a real
-monitored address before public release; see blocker list in PROJECT_STATUS)*.
+**Preferred:** use **GitHub Private Vulnerability Reporting** — open the repo's
+**Security** tab → **Report a vulnerability**. This is a private channel straight
+to the maintainers; no email address is needed. *(Enable it once in repo Settings
+→ Advanced Security → “Private vulnerability reporting”.)*
+
+**Email:** a dedicated `security@` address will be published here once the
+project has its own domain. A `users.noreply.github.com` address is deliberately
+**not** used — GitHub does not deliver mail sent to noreply addresses, so it
+cannot receive reports.
 
 Include: affected version/commit, a description, reproduction steps, and impact.
 We aim to acknowledge within a few business days.

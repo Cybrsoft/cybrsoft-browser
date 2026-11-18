@@ -1,0 +1,31 @@
+{
+  "_comment": "Default keyboard shortcuts (Windows). All are user-customizable in Settings → Shortcuts (spec §16). 'keys' is the default binding; 'customizable:false' marks a few OS/engine-reserved ones. Chords use '+'. The browser loads these as defaults and stores user overrides in the profile.",
+  "version": 1,
+  "shortcuts": [
+    { "id": "tab.new",            "keys": "Ctrl+T",        "desc": "New tab",                  "customizable": true },
+    { "id": "tab.close",          "keys": "Ctrl+W",        "desc": "Close tab",                "customizable": true },
+    { "id": "tab.reopen",         "keys": "Ctrl+Shift+T",  "desc": "Reopen closed tab",        "customizable": true },
+    { "id": "tab.next",           "keys": "Ctrl+Tab",      "desc": "Next tab",                 "customizable": true },
+    { "id": "tab.prev",           "keys": "Ctrl+Shift+Tab","desc": "Previous tab",             "customizable": true },
+    { "id": "window.new",         "keys": "Ctrl+N",        "desc": "New window",               "customizable": true },
+    { "id": "window.private",     "keys": "Ctrl+Shift+P",  "desc": "New private window",       "customizable": true },
+    { "id": "nav.focusUrlbar",    "keys": "Ctrl+L",        "desc": "Focus address bar",        "customizable": true },
+    { "id": "nav.reload",         "keys": "Ctrl+R",        "desc": "Reload",                   "customizable": true },
+    { "id": "nav.back",           "keys": "Alt+Left",      "desc": "Back",                     "customizable": true },
+    { "id": "nav.forward",        "keys": "Alt+Right",     "desc": "Forward",                  "customizable": true },
+    { "id": "page.find",          "keys": "Ctrl+F",        "desc": "Find in page",             "customizable": true },
+    { "id": "page.readerMode",    "keys": "Ctrl+Alt+R",    "desc": "Toggle reader mode",       "customizable": true },
+    { "id": "view.verticalTabs",  "keys": "Ctrl+Alt+V",    "desc": "Toggle vertical tabs",     "customizable": true },
+    { "id": "view.bookmarksBar",  "keys": "Ctrl+Shift+B",  "desc": "Toggle bookmarks toolbar", "customizable": true },
+    { "id": "panel.downloads",    "keys": "Ctrl+J",        "desc": "Downloads",                "customizable": true },
+    { "id": "panel.bookmarks",    "keys": "Ctrl+Shift+O",  "desc": "Bookmarks library",        "customizable": true },
+    { "id": "privacy.dashboard",  "keys": "Ctrl+Shift+Y",  "desc": "Open privacy dashboard",   "customizable": true },
+    { "id": "privacy.panel",      "keys": "Ctrl+Shift+K",  "desc": "Protection panel for this site", "customizable": true },
+    { "id": "workspace.next",     "keys": "Ctrl+Alt+Right","desc": "Next workspace",           "customizable": true },
+    { "id": "workspace.prev",     "keys": "Ctrl+Alt+Left", "desc": "Previous workspace",       "customizable": true },
+    { "id": "zoom.in",            "keys": "Ctrl+Plus",     "desc": "Zoom in",                  "customizable": true },
+    { "id": "zoom.out",           "keys": "Ctrl+Minus",    "desc": "Zoom out",                 "customizable": true },
+    { "id": "zoom.reset",         "keys": "Ctrl+0",        "desc": "Reset zoom",               "customizable": true },
+    { "id": "app.settings",       "keys": "Ctrl+Comma",    "desc": "Open settings",            "customizable": true }
+  ]
+}

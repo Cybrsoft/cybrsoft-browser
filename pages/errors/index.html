@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Error pages — Cybrsoft Browser</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{--cb-primary:#3B6FE0;--cb-deep:#1B3A8C;--cb-secondary:#E4ECFF;--cb-bg:#F3F6FF;--cb-surface:#FFF;
+    --cb-surface2:#EAF0FF;--cb-border:#D5DFF5;--cb-text:#4A5878;--cb-strong:#22336B;--cb-muted:#A5B4D8;
+    --cb-grad:linear-gradient(135deg,#3B6FE0,#1B3A8C);--warn:#E0663B;
+    --f-ui:"Inter",system-ui,sans-serif;--f-h:"Bricolage Grotesque",sans-serif}
+  :root[data-theme="dark"]{--cb-primary:#6D9BFF;--cb-secondary:#22336B;--cb-bg:#0A1330;--cb-surface:#101C42;
+    --cb-surface2:#0F275E;--cb-border:#22336B;--cb-text:#C7D6FF;--cb-strong:#EAF0FF;--cb-muted:#A5B4D8;
+    --cb-grad:linear-gradient(135deg,#3B6FE0,#0F1D4A);--warn:#F08A63}
+  *{box-sizing:border-box}
+  body{margin:0;min-height:100vh;background:var(--cb-bg);color:var(--cb-text);font-family:var(--f-ui);
+    display:grid;place-items:center;padding:24px 16px}
+  .switch{position:fixed;top:14px;left:50%;transform:translateX(-50%);display:flex;gap:5px;flex-wrap:wrap;justify-content:center;
+    background:var(--cb-surface);border:1px solid var(--cb-border);border-radius:999px;padding:5px;max-width:94vw}
+  .switch button{border:0;background:transparent;color:var(--cb-text);font:inherit;font-size:12px;padding:6px 11px;border-radius:999px;cursor:pointer}
+  .switch button.on{background:var(--cb-primary);color:#fff}
+  .theme{position:fixed;top:14px;right:16px;background:transparent;border:0;color:var(--cb-muted);font-size:12px;cursor:pointer}
+  .card{max-width:520px;text-align:center}
+  .icon{width:76px;height:76px;border-radius:22px;margin:0 auto 20px;display:grid;place-items:center;font-size:38px;
+    background:var(--cb-surface2);border:1px solid var(--cb-border)}
+  .icon.danger{background:color-mix(in srgb,var(--warn) 16%,transparent);border-color:var(--warn)}
+  h1{font-family:var(--f-h);font-weight:700;color:var(--cb-strong);font-size:24px;margin:0 0 10px}
+  p{font-size:14px;line-height:1.55;margin:0 auto 10px;max-width:440px}
+  .host{font-family:ui-monospace,monospace;background:var(--cb-surface2);border:1px solid var(--cb-border);
+    border-radius:7px;padding:2px 8px;color:var(--cb-strong);font-size:13px}
+  .why{font-size:12px;color:var(--cb-muted);margin-top:4px}
+  .acts{display:flex;gap:10px;justify-content:center;margin-top:22px;flex-wrap:wrap}
+  button.b{font:inherit;font-weight:600;font-size:14px;border-radius:10px;padding:11px 20px;cursor:pointer;border:1px solid var(--cb-border);background:var(--cb-surface);color:var(--cb-text)}
+  button.b.primary{background:var(--cb-grad);color:#fff;border:0}
+  button.b.danger{border-color:var(--warn);color:var(--warn)}
+  .brand{position:fixed;bottom:14px;left:50%;transform:translateX(-50%);font-size:11px;color:var(--cb-muted);display:flex;align-items:center;gap:7px}
+  .mark{width:18px;height:18px;border-radius:5px;background:var(--cb-grad);display:inline-grid;place-items:center;color:#fff;font-family:var(--f-h);font-weight:700;font-size:11px}
+</style>
+</head>
+<body>
+  <div class="switch" id="sw"></div>
+  <button class="theme" onclick="t()">◐ theme</button>
+  <div class="card" id="card"></div>
+  <div class="brand"><span class="mark">C</span> Cybrsoft Browser</div>
+<script>
+  const SITE='<span class="host">example-news.com</span>';
+  const ERRORS={
+    dns:{icon:"🔍",title:"We can’t find that site",
+      body:`We couldn’t find the server for ${SITE}. Check the address for typos, or your connection.`,
+      why:"DNS lookup failed",acts:[["Try again","primary"],["Go back",""]]},
+    offline:{icon:"📡",title:"You’re offline",
+      body:`Cybrsoft Browser can’t reach the internet right now. Check your Wi‑Fi or network.`,
+      why:"No network connection",acts:[["Try again","primary"],["Open a saved page",""]]},
+    timeout:{icon:"⏱",title:"This is taking too long",
+      body:`${SITE} took too long to respond. It may be busy or temporarily down.`,
+      why:"Connection timed out",acts:[["Try again","primary"],["Go back",""]]},
+    cert:{icon:"⚠",danger:true,title:"This connection isn’t secure",
+      body:`The security certificate for ${SITE} isn’t valid, so Cybrsoft Browser can’t confirm you’re connected to the real site. Someone may be trying to impersonate it.`,
+      why:"Certificate error (SEC_ERROR)",acts:[["Go back (recommended)","primary"],["Advanced…","danger"]]},
+    malicious:{icon:"🛡",danger:true,title:"Cybrsoft blocked this site",
+      body:`${SITE} is on a list of sites known to host malware or phishing. We stopped it from loading to protect you.`,
+      why:"Matched a known-malicious list (local check)",acts:[["Go back to safety","primary"],["See details",""]]},
+    blockedext:{icon:"🧩",title:"Blocked by a protection",
+      body:`A tracker or ad resource from ${SITE} was blocked by your privacy protection. If the page looks broken, you can allow it for this site.`,
+      why:"Blocked by content protection",acts:[["Keep blocking","primary"],["Allow on this site","danger"]]}
+  };
+  const ORDER=[["dns","DNS"],["offline","Offline"],["timeout","Timeout"],["cert","Cert"],["malicious","Malicious"],["blockedext","Blocked"]];
+  function render(k){
+    const e=ERRORS[k];
+    document.getElementById('card').innerHTML=`
+      <div class="icon ${e.danger?'danger':''}">${e.icon}</div>
+      <h1>${e.title}</h1><p>${e.body}</p><div class="why">${e.why}</div>
+      <div class="acts">${e.acts.map(([l,c])=>`<button class="b ${c}">${l}</button>`).join('')}</div>`;
+    [...document.querySelectorAll('#sw button')].forEach(b=>b.classList.toggle('on',b.dataset.k===k));
+  }
+  const sw=document.getElementById('sw');
+  sw.innerHTML=ORDER.map(([k,l],i)=>`<button data-k="${k}" class="${i===0?'on':''}" onclick="render('${k}')">${l}</button>`).join('');
+  function t(){const r=document.documentElement;r.setAttribute('data-theme',r.getAttribute('data-theme')==='dark'?'light':'dark');}
+  render('dns');
+</script>
+</body>
+</html>
