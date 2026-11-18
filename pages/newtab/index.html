@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>New Tab — Cybrsoft Browser</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{--cb-primary:#3B6FE0;--cb-deep:#1B3A8C;--cb-secondary:#E4ECFF;--cb-bg:#F3F6FF;--cb-surface:#FFF;
+    --cb-surface2:#EAF0FF;--cb-border:#D5DFF5;--cb-text:#4A5878;--cb-strong:#22336B;--cb-muted:#A5B4D8;
+    --cb-grad:linear-gradient(135deg,#3B6FE0,#1B3A8C);--f-ui:"Inter",system-ui,sans-serif;--f-h:"Bricolage Grotesque",sans-serif}
+  :root[data-theme="dark"]{--cb-primary:#6D9BFF;--cb-secondary:#22336B;--cb-bg:#0A1330;--cb-surface:#101C42;
+    --cb-surface2:#0F275E;--cb-border:#22336B;--cb-text:#C7D6FF;--cb-strong:#EAF0FF;--cb-muted:#A5B4D8;
+    --cb-grad:linear-gradient(135deg,#3B6FE0,#0F1D4A)}
+  *{box-sizing:border-box}
+  body{margin:0;min-height:100vh;background:var(--cb-bg);color:var(--cb-text);font-family:var(--f-ui);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px 16px;gap:26px}
+  .brand{display:flex;align-items:center;gap:10px}
+  .mark{width:30px;height:30px;border-radius:9px;background:var(--cb-grad);display:grid;place-items:center;color:#fff;
+    font-family:var(--f-h);font-weight:700}
+  .brand span{font-family:var(--f-h);font-weight:700;color:var(--cb-strong);font-size:17px}
+  form{width:100%;max-width:540px}
+  .search{display:flex;align-items:center;gap:10px;background:var(--cb-surface);border:1px solid var(--cb-border);
+    border-radius:999px;padding:14px 20px;box-shadow:0 8px 30px rgba(16,28,66,.10)}
+  .search:focus-within{border-color:var(--cb-primary);box-shadow:0 0 0 3px color-mix(in srgb,var(--cb-primary) 22%,transparent)}
+  .search input{flex:1;border:0;background:transparent;font:inherit;font-size:15px;color:var(--cb-strong);outline:none}
+  .search .eng{font-size:12px;color:var(--cb-muted);white-space:nowrap}
+  .sc{display:flex;gap:16px;flex-wrap:wrap;justify-content:center;max-width:540px}
+  .tile{display:flex;flex-direction:column;align-items:center;gap:7px;font-size:12px;color:var(--cb-text);
+    text-decoration:none;width:72px}
+  .tile .ic{width:52px;height:52px;border-radius:15px;background:var(--cb-surface);border:1px solid var(--cb-border);
+    display:grid;place-items:center;color:var(--cb-primary);font-family:var(--f-h);font-weight:700;font-size:20px}
+  .tile:hover .ic{background:var(--cb-surface2);border-color:var(--cb-primary)}
+  .shield{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--cb-muted);
+    background:var(--cb-surface);border:1px solid var(--cb-border);border-radius:999px;padding:7px 14px}
+  .shield b{color:var(--cb-primary)}
+  .set{position:fixed;top:16px;right:18px;font-size:12px;color:var(--cb-muted);text-decoration:none}
+  .set:hover{color:var(--cb-primary)}
+  .theme{position:fixed;top:16px;left:18px;font-size:12px;color:var(--cb-muted);background:transparent;border:0;cursor:pointer}
+</style>
+</head>
+<body>
+  <button class="theme" onclick="t()">◐ theme</button>
+  <a class="set" href="../settings/index.html">⚙ Settings</a>
+  <div class="brand"><div class="mark">C</div><span>Cybrsoft Browser</span></div>
+  <form onsubmit="return go(event)">
+    <div class="search">
+      <span>🔍</span>
+      <input id="q" type="text" placeholder="Search the web or enter an address" autofocus>
+      <span class="eng" id="eng">DuckDuckGo</span>
+    </div>
+  </form>
+  <div class="sc">
+    <a class="tile" href="#"><div class="ic">D</div>Docs</a>
+    <a class="tile" href="#"><div class="ic">G</div>GitHub</a>
+    <a class="tile" href="#"><div class="ic">M</div>Mail</a>
+    <a class="tile" href="#"><div class="ic">+</div>Add</a>
+  </div>
+  <div class="shield">🛡 Protection on · <b id="n">0</b>&nbsp;trackers blocked today</div>
+  <script>
+    // In the browser: engine comes from the user's choice; the counter reads the
+    // REAL privacy subsystem (ARCHITECTURE §6.4) — no fabricated numbers ship.
+    // This standalone preview shows the layout only; the counter stays 0.
+    function go(e){e.preventDefault();const q=document.getElementById('q').value.trim();
+      if(q)alert('Search: '+q+'\\n(In the browser this queries your chosen engine.)');return false;}
+    function t(){const r=document.documentElement;r.setAttribute('data-theme',r.getAttribute('data-theme')==='dark'?'light':'dark');}
+  </script>
+</body>
+</html>

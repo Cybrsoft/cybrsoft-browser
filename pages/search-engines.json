@@ -1,0 +1,48 @@
+{
+  "_comment": "Search engines offered by Cybrsoft Browser. NO default is imposed — the first-run wizard requires the user to choose (spec §7). 'privacy' is a short, honest note, not a ranking. Users can add custom engines and change the choice later. searchUrl uses {q} as the query placeholder.",
+  "default": null,
+  "engines": [
+    {
+      "id": "duckduckgo",
+      "name": "DuckDuckGo",
+      "searchUrl": "https://duckduckgo.com/?q={q}",
+      "suggestUrl": "https://duckduckgo.com/ac/?q={q}&type=list",
+      "privacy": "Does not profile users; no personal search history."
+    },
+    {
+      "id": "brave",
+      "name": "Brave Search",
+      "searchUrl": "https://search.brave.com/search?q={q}",
+      "suggestUrl": "https://search.brave.com/api/suggest?q={q}",
+      "privacy": "Independent index; privacy-focused."
+    },
+    {
+      "id": "startpage",
+      "name": "Startpage",
+      "searchUrl": "https://www.startpage.com/sp/search?query={q}",
+      "suggestUrl": "",
+      "privacy": "Google results without tracking you."
+    },
+    {
+      "id": "google",
+      "name": "Google",
+      "searchUrl": "https://www.google.com/search?q={q}",
+      "suggestUrl": "https://suggestqueries.google.com/complete/search?client=firefox&q={q}",
+      "privacy": "Largest index; collects search data."
+    },
+    {
+      "id": "bing",
+      "name": "Bing",
+      "searchUrl": "https://www.bing.com/search?q={q}",
+      "suggestUrl": "https://www.bing.com/osjson.aspx?query={q}",
+      "privacy": "Microsoft index; collects search data."
+    }
+  ],
+  "customTemplate": {
+    "id": "custom",
+    "name": "",
+    "searchUrl": "",
+    "suggestUrl": "",
+    "privacy": "User-defined engine."
+  }
+}

@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Settings — Cybrsoft Browser</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{--cb-primary:#3B6FE0;--cb-deep:#1B3A8C;--cb-secondary:#E4ECFF;--cb-bg:#F3F6FF;--cb-surface:#FFF;
+    --cb-surface2:#EAF0FF;--cb-border:#D5DFF5;--cb-text:#4A5878;--cb-strong:#22336B;--cb-muted:#A5B4D8;
+    --cb-grad:linear-gradient(135deg,#3B6FE0,#1B3A8C);--f-ui:"Inter",system-ui,sans-serif;--f-h:"Bricolage Grotesque",sans-serif;--r:12px}
+  :root[data-theme="dark"]{--cb-primary:#6D9BFF;--cb-secondary:#22336B;--cb-bg:#0A1330;--cb-surface:#101C42;
+    --cb-surface2:#0F275E;--cb-border:#22336B;--cb-text:#C7D6FF;--cb-strong:#EAF0FF;--cb-muted:#A5B4D8;
+    --cb-grad:linear-gradient(135deg,#3B6FE0,#0F1D4A)}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--cb-bg);color:var(--cb-text);font-family:var(--f-ui);display:flex;min-height:100vh}
+  nav{width:230px;background:var(--cb-surface);border-right:1px solid var(--cb-border);padding:18px 12px;flex-shrink:0}
+  .brand{display:flex;align-items:center;gap:9px;padding:0 10px 16px}
+  .mark{width:28px;height:28px;border-radius:8px;background:var(--cb-grad);display:grid;place-items:center;color:#fff;font-family:var(--f-h);font-weight:700}
+  .brand b{font-family:var(--f-h);color:var(--cb-strong);font-size:15px}
+  nav a{display:block;padding:9px 12px;border-radius:9px;color:var(--cb-text);text-decoration:none;font-size:14px;cursor:pointer}
+  nav a:hover{background:var(--cb-surface2)}
+  nav a.on{background:var(--cb-secondary);color:var(--cb-strong);font-weight:600}
+  main{flex:1;padding:30px 34px;max-width:720px}
+  h1{font-family:var(--f-h);color:var(--cb-strong);font-size:22px;margin:0 0 18px}
+  .sec{display:none}.sec.on{display:block}
+  .row{display:flex;align-items:center;gap:14px;padding:14px 0;border-bottom:1px solid var(--cb-border)}
+  .row .meta{flex:1}.row .t{font-weight:600;color:var(--cb-strong);font-size:14px}.row .d{font-size:12px;color:var(--cb-muted);margin-top:2px}
+  select,input[type=text]{font:inherit;padding:8px 11px;border-radius:9px;border:1px solid var(--cb-border);background:var(--cb-bg);color:var(--cb-strong)}
+  .seg{display:flex;border:1px solid var(--cb-border);border-radius:10px;overflow:hidden}
+  .seg button{border:0;background:var(--cb-surface);color:var(--cb-text);font:inherit;font-size:13px;padding:8px 14px;cursor:pointer}
+  .seg button.on{background:var(--cb-primary);color:#fff}
+  .sw{width:42px;height:24px;border-radius:999px;background:var(--cb-border);position:relative;cursor:pointer;flex-shrink:0}
+  .sw.on{background:var(--cb-primary)}
+  .sw::after{content:"";position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:#fff;transition:.15s}
+  .sw.on::after{left:21px}
+  .card{background:var(--cb-surface);border:1px solid var(--cb-border);border-radius:var(--r);padding:16px 18px;margin-bottom:14px}
+  .pill{display:inline-block;font-size:11px;color:var(--cb-primary);background:var(--cb-secondary);border-radius:999px;padding:3px 9px;margin-left:8px}
+  .muted{font-size:12px;color:var(--cb-muted)}
+</style>
+</head>
+<body>
+<nav>
+  <div class="brand"><div class="mark">C</div><b>Settings</b></div>
+  <a class="on" onclick="nav('privacy',this)">Privacy &amp; Security</a>
+  <a onclick="nav('appearance',this)">Appearance</a>
+  <a onclick="nav('search',this)">Search</a>
+  <a onclick="nav('tabs',this)">Tabs &amp; Workspaces</a>
+  <a onclick="nav('downloads',this)">Downloads</a>
+  <a onclick="nav('updates',this)">Updates</a>
+  <a onclick="nav('backup',this)">Backup &amp; Data</a>
+  <a onclick="nav('ext',this)">Extensions</a>
+  <a onclick="nav('about',this)">About</a>
+</nav>
+<main>
+  <section class="sec on" id="privacy">
+    <h1>Privacy &amp; Security</h1>
+    <div class="card">
+      <div class="t" style="color:var(--cb-strong);font-weight:600">Protection level</div>
+      <div class="muted" style="margin:4px 0 12px">Strict is the default. Switching applies a bundle of protections (see docs/PRIVACY_PROFILES.md).</div>
+      <div class="seg" id="profile">
+        <button class="on" onclick="setProf('strict',this)">Strict</button>
+        <button onclick="setProf('balanced',this)">Balanced</button>
+        <button onclick="setProf('custom',this)">Custom</button>
+      </div>
+    </div>
+    <div id="toggles">
+      <div class="row"><div class="meta"><div class="t">Tracker blocking (ETP)</div><div class="d">Block known trackers and cross-site cookies.</div></div><div class="sw on" onclick="tog(this)"></div></div>
+      <div class="row"><div class="meta"><div class="t">Total Cookie Protection</div><div class="d">Isolate cookies per site.</div></div><div class="sw on" onclick="tog(this)"></div></div>
+      <div class="row"><div class="meta"><div class="t">Fingerprinting protection (FPP)</div><div class="d">Resist known fingerprinting scripts.</div></div><div class="sw on" onclick="tog(this)"></div></div>
+      <div class="row"><div class="meta"><div class="t">Strong anti-fingerprinting (RFP)<span class="pill">may break sites</span></div><div class="d">Make the browser look generic. On for Strict.</div></div><div class="sw on" onclick="tog(this)"></div></div>
+      <div class="row"><div class="meta"><div class="t">HTTPS-only mode</div><div class="d">Require secure connections.</div></div><div class="sw on" onclick="tog(this)"></div></div>
+      <div class="row"><div class="meta"><div class="t">DNS-over-HTTPS</div><div class="d">Encrypt DNS lookups.</div></div><div class="sw on" onclick="tog(this)"></div></div>
+    </div>
+    <p class="muted" style="margin-top:14px">No telemetry is collected, ever — this is enforced and locked (not a toggle).</p>
+  </section>
+
+  <section class="sec" id="appearance">
+    <h1>Appearance</h1>
+    <div class="row"><div class="meta"><div class="t">Theme</div><div class="d">Follow Windows, or override.</div></div>
+      <div class="seg"><button onclick="theme('system',this)" class="on">System</button><button onclick="theme('light',this)">Light</button><button onclick="theme('dark',this)">Dark</button></div></div>
+    <div class="row"><div class="meta"><div class="t">Accent color</div><div class="d">Cybrsoft blue by default.</div></div><input type="text" value="#3B6FE0" style="width:110px"></div>
+    <div class="row"><div class="meta"><div class="t">Bookmarks toolbar</div><div class="d">Show the bookmarks bar.</div></div><div class="sw" onclick="tog(this)"></div></div>
+  </section>
+
+  <section class="sec" id="search">
+    <h1>Search</h1>
+    <div class="row"><div class="meta"><div class="t">Default search engine</div><div class="d">You chose this at first run; change anytime.</div></div>
+      <select><option>DuckDuckGo</option><option>Brave Search</option><option>Startpage</option><option>Google</option><option>Bing</option><option>Custom…</option></select></div>
+    <div class="row"><div class="meta"><div class="t">Search suggestions</div><div class="d">Send keystrokes to the engine for suggestions.</div></div><div class="sw" onclick="tog(this)"></div></div>
+    <p class="muted" style="margin-top:12px">Add a custom engine with a URL using <code>%s</code> for the query.</p>
+  </section>
+
+  <section class="sec" id="tabs"><h1>Tabs &amp; Workspaces</h1>
+    <div class="row"><div class="meta"><div class="t">Tab layout</div><div class="d">Horizontal or vertical.</div></div>
+      <div class="seg"><button class="on" onclick="seg(this)">Horizontal</button><button onclick="seg(this)">Vertical</button></div></div>
+    <div class="row"><div class="meta"><div class="t">Tab groups</div><div class="d">Group related tabs (native).</div></div><div class="sw on" onclick="tog(this)"></div></div>
+    <div class="row"><div class="meta"><div class="t">Workspaces<span class="pill">Phase 6</span></div><div class="d">Separate sets of tabs/state. Implementation in progress.</div></div><div class="sw" onclick="tog(this)"></div></div>
+  </section>
+
+  <section class="sec" id="downloads"><h1>Downloads</h1>
+    <div class="row"><div class="meta"><div class="t">Download location</div><div class="d">Where files are saved.</div></div><input type="text" value="C:\\Users\\you\\Downloads" style="width:220px"></div>
+    <div class="row"><div class="meta"><div class="t">Always ask where to save</div></div><div class="sw" onclick="tog(this)"></div></div>
+  </section>
+
+  <section class="sec" id="updates"><h1>Updates</h1>
+    <div class="row"><div class="meta"><div class="t">Automatic updates</div><div class="d">Recommended. Security updates are prioritized and cryptographically verified.</div></div><div class="sw on" onclick="tog(this)"></div></div>
+    <p class="muted">Update checks contact only Cybrsoft's update server and carry no browsing data or tracking ID.</p>
+  </section>
+
+  <section class="sec" id="backup"><h1>Backup &amp; Data</h1>
+    <div class="row"><div class="meta"><div class="t">Export</div><div class="d">Everyday export (bookmarks, settings).</div></div><button>Export…</button></div>
+    <div class="row"><div class="meta"><div class="t">Full encrypted backup</div><div class="d">Settings, bookmarks, tab groups, workspaces, extension config. Encrypted locally.</div></div><button>Create backup…</button></div>
+    <div class="row"><div class="meta"><div class="t">Import</div><div class="d">From Firefox or another browser.</div></div><button>Import…</button></div>
+    <p class="muted">All data stays on this device. No account, no cloud sync. Backups may contain sensitive data — keep them safe.</p>
+  </section>
+
+  <section class="sec" id="ext"><h1>Extensions</h1>
+    <div class="card"><div class="t" style="color:var(--cb-strong);font-weight:600">uBlock Origin <span class="pill">bundled</span></div><div class="muted" style="margin-top:4px">Ad &amp; tracker blocking. Feeds the privacy dashboard.</div></div>
+    <p class="muted">Install Firefox extensions (Bitwarden, Proton Pass, Dark Reader…) — full WebExtensions support is inherited from the engine.</p>
+  </section>
+
+  <section class="sec" id="about"><h1>About Cybrsoft Browser</h1>
+    <div class="card"><div class="t" style="color:var(--cb-strong);font-weight:600">Cybrsoft Browser</div>
+      <div class="muted" style="margin-top:4px">Pre-release · built on Firefox ESR (Gecko). Open source (MPL-2.0).</div>
+      <div class="muted" style="margin-top:8px">Not affiliated with or endorsed by Mozilla. Firefox is a trademark of the Mozilla Foundation.</div></div>
+  </section>
+</main>
+<script>
+  function nav(id,el){document.querySelectorAll('nav a').forEach(a=>a.classList.remove('on'));el.classList.add('on');
+    document.querySelectorAll('.sec').forEach(s=>s.classList.remove('on'));document.getElementById(id).classList.add('on');}
+  function tog(el){el.classList.toggle('on');}
+  function seg(el){[...el.parentNode.children].forEach(b=>b.classList.remove('on'));el.classList.add('on');}
+  function theme(t,el){seg(el);document.documentElement.setAttribute('data-theme',t==='system'?'light':t);}
+  function setProf(p,el){seg(el);
+    // In the browser this applies prefs/profiles/<p>.js. Preview reflects the toggles.
+    const on=id=>document.querySelectorAll('#toggles .sw')[id];
+    const set=(i,v)=>on(i)&&on(i).classList.toggle('on',v);
+    if(p==='strict'){[0,1,2,3,4,5].forEach(i=>set(i,true));}
+    else if(p==='balanced'){set(0,true);set(1,true);set(2,true);set(3,false);set(4,true);set(5,true);}
+    // custom: leave as-is (user controls)
+  }
+</script>
+</body>
+</html>
