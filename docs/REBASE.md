@@ -49,7 +49,17 @@ When the ESR line changes (e.g. 153 → next), expect more conflicts and API
 changes (chrome internals move). Budget real time for these, re-test all real
 extensions (Phase 5 list), and re-verify the privacy network audit (§6.2).
 
-## Automation hook
-The `rebase.sh` check is CI-friendly: a scheduled job can run it against the
-latest ESR tarball and open an issue/notification when a new release needs
-adopting, so nothing is missed. (Wire this up once build infra lands.)
+## Automation (implemented)
+You don't have to watch Mozilla manually. The **`esr-watch`** GitHub Action
+(`.github/workflows/esr-watch.yml`) runs weekly on a free runner and:
+1. calls `build/scripts/check-upstream.sh`, which reads Mozilla's authoritative
+   `firefox_versions.json` and compares the latest ESR to our pin;
+2. if a newer ESR exists, **opens a GitHub issue** (label `esr-rebase`) with the
+   exact adopt-commands — so it lands in your GitHub notifications/email.
+
+It only watches (no build, no browsing data). Adopting the release is still the
+human step above — usually `rebase.sh <ver>` → 0 conflicts → bump the pin.
+Run it on demand any time from the Actions tab ("Run workflow").
+
+`check-upstream.sh` exit codes: `0` up to date · `10` newer ESR available · `2`
+error. Test it offline with `CB_VERSIONS_JSON=fixture.json`.

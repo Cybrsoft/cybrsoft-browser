@@ -1,0 +1,77 @@
+# Cybrsoft Browser — ESR security-release watch
+#
+# The solo-maintainer safety net (ARCHITECTURE §9, docs/REBASE.md). Once a week
+# it asks Mozilla's product-details feed whether a newer Firefox ESR than our
+# pin exists. If so, it opens a GitHub issue so the rebase isn't missed. Runs on
+# a GitHub-hosted runner (reaches Mozilla directly — no cost, no browsing data).
+#
+# This does NOT build anything; it just watches. Adopting the release is the
+# human step in docs/REBASE.md (usually `rebase.sh <ver>` → 0 conflicts → bump).
+
+name: esr-watch
+on:
+  schedule:
+    - cron: "17 6 * * 1"   # Mondays 06:17 UTC (jittered minute)
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - id: check
+        shell: bash
+        run: |
+          set +e
+          out="$(build/scripts/check-upstream.sh 2>&1)"
+          echo "$out"
+          grep -q 'status=update' <<<"$out" && echo "update=true" >> "$GITHUB_OUTPUT" || echo "update=false" >> "$GITHUB_OUTPUT"
+          echo "latest=$(sed -nE 's/.*latest=([0-9.]+).*/\1/p' <<<"$out" | tail -1)" >> "$GITHUB_OUTPUT"
+          echo "current=$(sed -nE 's/.*current=([0-9.]+).*/\1/p' <<<"$out" | tail -1)" >> "$GITHUB_OUTPUT"
+          exit 0
+
+      - name: Open rebase issue if a newer ESR exists
+        if: steps.check.outputs.update == 'true'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const latest = '${{ steps.check.outputs.latest }}';
+            const current = '${{ steps.check.outputs.current }}';
+            const title = `Security rebase: Firefox ESR ${latest} (pinned ${current})`;
+            const { owner, repo } = context.repo;
+            const open = await github.paginate(github.rest.issues.listForRepo, {
+              owner, repo, state: 'open', labels: 'esr-rebase', per_page: 100,
+            });
+            if (open.some(i => i.title === title)) {
+              core.info('Rebase issue already open for this version.');
+              return;
+            }
+            const body = [
+              `A newer Firefox ESR is available.`,
+              ``,
+              `- **Pinned:** ${current}esr`,
+              `- **Latest ESR:** ${latest}esr`,
+              ``,
+              `### Adopt it (see docs/REBASE.md)`,
+              '```bash',
+              `build/scripts/rebase.sh ${latest}`,
+              `# if 0 conflicts:`,
+              `sed -i 's/^CB_FIREFOX_VERSION=.*/CB_FIREFOX_VERSION="${latest}"/' config/cybrsoft.conf`,
+              `build/scripts/fetch-source.sh --force && build/scripts/apply-patches.sh`,
+              `# build + smoke-test on the Windows host, then commit:`,
+              `git commit -am "rebase: Firefox ${latest}esr (security)"`,
+              '```',
+              ``,
+              `Treat ESR security releases as *act within days*; emergency releases *act now*.`,
+              ``,
+              `_Opened automatically by the esr-watch workflow._`,
+            ].join('\n');
+            // Ensure the label exists (ignore error if it already does).
+            try { await github.rest.issues.createLabel({ owner, repo, name: 'esr-rebase', color: '3B6FE0' }); } catch (e) {}
+            await github.rest.issues.create({ owner, repo, title, body, labels: ['esr-rebase'] });
+            core.info(`Opened rebase issue for ${latest}esr`);
