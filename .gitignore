@@ -1,0 +1,23 @@
+# Build output / engine source (never commit the Firefox tree or build artifacts)
+/firefox-source/
+/obj-*/
+/dist/
+*.mar
+*.exe
+*.zip
+
+# Node / fork-tooling
+node_modules/
+.surfer/
+.gluon/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+*.log
+.idea/
+.vscode/
+
+# Scratch
+/tmp/
+*.tmp
