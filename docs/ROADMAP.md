@@ -30,21 +30,22 @@ magnitude for a small team** and assume the engine decision in `ARCHITECTURE.md`
 *Effort: weeks (dominated by build infra + toolchain).*
 
 ## Phase 3 — Cybrsoft interface
-- [ ] Cobal design system in chrome CSS (light + purpose-built dark)
-- [ ] Toolbar restyle + privacy control
-- [ ] New-tab page (minimal default, opt-in widgets)
-- [ ] Settings UI
-- [ ] First-run onboarding (search-engine choice, profile, theme, tab layout)
+- [x] Cobal design system in chrome CSS (light + purpose-built dark) — `theme/`
+- [~] Toolbar restyle + privacy control — `userChrome.css` (pending build-wiring)
+- [x] New-tab page (minimal default, opt-in widgets) — `pages/newtab/`
+- [x] Settings UI (prototype) — `pages/settings/`
+- [x] First-run onboarding (search-engine choice, profile, theme, tab layout) — `pages/onboarding/`
 **Exit:** the browser *looks and onboards* like a Cybrsoft product.
-*Effort: weeks–months (most net-new UI work).*
+*Status: UI prototypes complete; wiring into `about:` pages needs the build (B1).*
 
 ## Phase 4 — Privacy foundation
-- [ ] Bundle & pin uBlock Origin; filter-list update path (no tracking)
-- [ ] Privacy profiles Strict/Balanced/Custom → pref/uBO bundles (§6.3)
-- [ ] ETP/TCP/FPP/DoH/HTTPS-only wiring + per-site exceptions
+- [~] Bundle & pin uBlock Origin; filter-list update path — plan in `extensions-bundled/` (bundle needs build)
+- [x] Privacy profiles Strict/Balanced/Custom → pref bundles (§6.3) — `prefs/profiles/`
+- [x] ETP/TCP/FPP/DoH/HTTPS-only prefs defined — validated against build in P4/P7
 - [ ] Cookie-popup reduction (via uBO lists) with site exceptions
 - [ ] Permission management UI
 **Exit:** Strict-by-default privacy that degrades gracefully with visible reasons.
+*Status: pref/config bundles defined; wiring + per-site exceptions need the build (B1).*
 
 ## Phase 5 — Extensions & profiles
 - [ ] Verify WebExtension install/remove/enable/permissions/update

@@ -33,6 +33,19 @@ spec §21. **No feature is listed as complete without executed tests.**
   dark), `userChrome.css` chrome theme, Firefox branding files (`configure.sh`,
   `brand.ftl`, branding prefs), and a rendered `theme/cybrsoft/preview.html`
 
+**Governance / licensing (spec §18)**
+- `LICENSE` (exact MPL-2.0), `CONTRIBUTING.md`, `SECURITY.md`,
+  `THIRD_PARTY_NOTICES.md`
+
+**Phase 4 (config-level)**
+- Privacy profiles: `prefs/profiles/{strict,balanced,custom}.js` +
+  `docs/PRIVACY_PROFILES.md` (Strict default)
+- uBlock Origin bundling plan: `extensions-bundled/README.md`
+
+**Phase 3 UI (working prototypes, not yet engine-wired)**
+- `pages/onboarding/` first-run wizard, `pages/newtab/`, `pages/settings/`,
+  `pages/search-engines.json` (no imposed default)
+
 ## Decisions locked (2026-11-18)
 - **Upstream channel:** Firefox **ESR** (B3)
 - **Rebase ownership:** **Solo** → rebase automation is a first-class goal (B6)
@@ -70,15 +83,21 @@ See `ARCHITECTURE.md §11`: B1 build infra · B2 code-signing cert · B3 ESR vs
 stable · B4 update server · B5 brand capture · B6 team/cadence commitment.
 
 ## Test results
-- `build/scripts/selftest.sh` → **5/5 passed** (2026-11-18, Linux): config loads,
-  series parsing skips comments/blanks, good patch applies clean, bad patch
-  detected as conflict.
-- `bash -n` syntax check: **all 7 scripts pass.**
+- `build/scripts/selftest.sh` → **5/5 passed** (Linux).
+- `build/scripts/check-upstream.sh` version-compare → **5/5 fixtures passed**.
+- `bash -n` syntax check: **all 8 scripts pass.**
+- UI pages: `search-engines.json` parses; onboarding/newtab/settings/preview
+  **HTML well-formed** (no unclosed tags).
 - **NOT yet executed** (need Windows + ~40 GB, blocker B1): `fetch-source.sh`
-  against the real 153esr tarball, `build.sh`, `package.sh`. No compiled binary
-  exists yet — this is stated plainly and not claimed as working.
+  against the real 153esr tarball, `build.sh`, `package.sh`, and wiring the UI
+  pages / theme / prefs into a running build. No compiled binary exists yet —
+  stated plainly, not claimed as working.
 
 ## Next steps
-1. Branding assets + first chrome theme pass (Cobal tokens) — no build needed.
-2. Stand up build infra (B1) → run `fetch-source.sh` + first `mach build`.
-3. Add branding/chrome source patches against the real engine tree.
+1. **Stand up build infra (B1)** → run `fetch-source.sh` + first `mach build`.
+   This is now the main gate: tooling, prefs, theme, pages, and profiles are all
+   ready to be wired into a real build.
+2. Wire UI pages → `about:` pages; apply theme + profiles as source patches.
+3. Phase 5: bundle uBlock Origin (pin + verify) and test real extensions.
+4. Provide real Cybrsoft Browser icon assets (branding), set security contact
+   (B2 cert, B4 update server) ahead of any release.
