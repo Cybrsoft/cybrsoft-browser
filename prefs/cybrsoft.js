@@ -71,3 +71,10 @@ pref("browser.safebrowsing.downloads.remote.enabled", false);
 /* ---- Search: no imposed default; the first-run wizard sets this ---- */
 pref("browser.urlbar.suggest.quicksuggest.sponsored", false);
 pref("browser.urlbar.suggest.quicksuggest.nonsponsored", false);
+
+/* ---- Cybrsoft chrome theme ---- */
+// Allow the shipped theme/cybrsoft/userChrome.css (placed in the profile's
+// chrome/ dir) to style the browser chrome. See docs/FORK_TOOLING.md.
+pref("toolkit.legacyUserProfileCustomizations.stylesheets", true);
+// Respect the OS light/dark theme for both chrome and web content by default.
+pref("layout.css.prefers-color-scheme.content-override", 2);

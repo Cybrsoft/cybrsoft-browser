@@ -1,0 +1,93 @@
+/* Cybrsoft Browser — chrome theme (first pass)
+ * Applies the Cybrsoft/Cobal identity to the Firefox browser chrome: toolbar,
+ * tabs, address bar, menus. Imports tokens.css for all colors/type.
+ *
+ * DEPLOYMENT: shipped into the profile's chrome/ directory with
+ * `toolkit.legacyUserProfileCustomizations.stylesheets` enabled by default
+ * (set in prefs/cybrsoft.js). A later source patch can instead load it as a
+ * built-in stylesheet for zero per-profile setup — see docs/FORK_TOOLING.md.
+ *
+ * STATUS: written against Firefox chrome structure but NOT yet validated
+ * against a running build (no build host yet — blocker B1). Selectors may need
+ * adjustment once the engine tree exists. Treated as a first pass, not final.
+ */
+
+@import url("tokens.css");
+
+/* ---- Toolbar area ---- */
+#navigator-toolbox {
+  --toolbar-bgcolor: var(--cb-bg) !important;
+  --toolbar-color: var(--cb-text) !important;
+  background-color: var(--cb-bg) !important;
+  border-bottom: 1px solid var(--cb-border) !important;
+  font-family: var(--cb-font-ui) !important;
+}
+
+#nav-bar {
+  background-color: var(--cb-bg) !important;
+  box-shadow: none !important;
+}
+
+/* Toolbar buttons */
+.toolbarbutton-1 > .toolbarbutton-icon,
+.toolbarbutton-1 > .toolbarbutton-badge-stack {
+  border-radius: var(--cb-radius-sm) !important;
+}
+.toolbarbutton-1:not([disabled]):hover > .toolbarbutton-icon {
+  background-color: var(--cb-secondary) !important;
+}
+
+/* ---- Address bar ---- */
+#urlbar {
+  font-family: var(--cb-font-ui) !important;
+}
+#urlbar-background {
+  background-color: var(--cb-surface) !important;
+  border: 1px solid var(--cb-border) !important;
+  border-radius: var(--cb-radius-md) !important;
+}
+#urlbar[focused="true"] > #urlbar-background {
+  border-color: var(--cb-primary) !important;
+  box-shadow: var(--cb-focus) !important;
+}
+#urlbar-input { color: var(--cb-text-strong) !important; }
+
+/* ---- Tabs ---- */
+.tabbrowser-tab {
+  font-family: var(--cb-font-ui) !important;
+}
+.tab-background {
+  border-radius: var(--cb-radius-sm) var(--cb-radius-sm) 0 0 !important;
+}
+.tabbrowser-tab[selected] .tab-background {
+  background-color: var(--cb-surface) !important;
+  box-shadow: inset 0 -2px 0 0 var(--cb-primary) !important;
+}
+.tabbrowser-tab:not([selected]):hover .tab-background {
+  background-color: var(--cb-secondary) !important;
+}
+.tab-label { color: var(--cb-text) !important; }
+.tabbrowser-tab[selected] .tab-label { color: var(--cb-text-strong) !important; }
+
+/* ---- Menus / panels ---- */
+menupopup, panel {
+  --panel-background: var(--cb-surface) !important;
+  --panel-color: var(--cb-text) !important;
+  --panel-border-color: var(--cb-border) !important;
+  --panel-border-radius: var(--cb-radius-md) !important;
+}
+
+/* ---- Accent: primary buttons in dialogs ---- */
+button.primary, .footer-button.primary, button[default] {
+  background: var(--cb-gradient) !important;
+  color: var(--cb-text-on-primary) !important;
+  border: 0 !important;
+  border-radius: var(--cb-radius-sm) !important;
+}
+
+/* ---- Find bar, sidebar headers inherit surface/border ---- */
+findbar, #sidebar-header {
+  background-color: var(--cb-bg) !important;
+  color: var(--cb-text) !important;
+  border-color: var(--cb-border) !important;
+}

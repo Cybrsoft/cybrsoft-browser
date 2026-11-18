@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cybrsoft Browser — identity preview</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  /* Tokens mirror theme/cybrsoft/tokens.css (self-contained for standalone viewing). */
+  :root{
+    --cb-primary:#3B6FE0;--cb-primary-deep:#1B3A8C;--cb-primary-bright:#6D9BFF;--cb-secondary:#E4ECFF;
+    --cb-tint-1:#EAF0FF;--cb-tint-2:#D5DFF5;--cb-tint-3:#C7D6FF;--cb-muted:#A5B4D8;
+    --cb-bg:#F3F6FF;--cb-surface:#FFFFFF;--cb-surface-2:#EAF0FF;--cb-border:#D5DFF5;
+    --cb-text:#4A5878;--cb-text-strong:#22336B;--cb-on:#FFFFFF;
+    --cb-gradient:linear-gradient(135deg,#3B6FE0 0%,#1B3A8C 100%);
+    --cb-font-ui:"Inter",system-ui,"Segoe UI",sans-serif;
+    --cb-font-head:"Bricolage Grotesque","Inter",system-ui,sans-serif;
+    --r-sm:6px;--r-md:10px;--r-lg:16px;
+  }
+  :root[data-theme="dark"]{
+    --cb-primary:#6D9BFF;--cb-primary-deep:#3B6FE0;--cb-primary-bright:#9DBBFF;--cb-secondary:#22336B;
+    --cb-tint-1:#101C42;--cb-tint-2:#14213D;--cb-tint-3:#0F275E;--cb-muted:#A5B4D8;
+    --cb-bg:#0A1330;--cb-surface:#101C42;--cb-surface-2:#0F275E;--cb-border:#22336B;
+    --cb-text:#C7D6FF;--cb-text-strong:#EAF0FF;--cb-on:#0A1330;
+    --cb-gradient:linear-gradient(135deg,#3B6FE0 0%,#0F1D4A 100%);
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--cb-bg);color:var(--cb-text);font-family:var(--cb-font-ui);
+       padding:24px 16px;transition:background .2s,color .2s}
+  .wrap{max-width:900px;margin:0 auto}
+  header{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:20px}
+  .mark{width:34px;height:34px;border-radius:9px;background:var(--cb-gradient);display:grid;place-items:center;
+        color:#fff;font-family:var(--cb-font-head);font-weight:700;font-size:20px;box-shadow:0 4px 14px rgba(59,111,224,.35)}
+  h1{font-family:var(--cb-font-head);font-weight:700;color:var(--cb-text-strong);margin:0;font-size:22px}
+  .sub{font-size:13px;color:var(--cb-muted)}
+  .mock{background:var(--cb-bg);border:1px solid var(--cb-border);border-radius:var(--r-lg);overflow:hidden;
+        box-shadow:0 10px 40px rgba(16,28,66,.14)}
+  /* tab strip */
+  .tabs{display:flex;gap:4px;padding:8px 8px 0;background:var(--cb-bg)}
+  .tab{font-size:13px;padding:8px 14px;border-radius:var(--r-sm) var(--r-sm) 0 0;color:var(--cb-text);
+       background:transparent;max-width:180px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .tab.active{background:var(--cb-surface);color:var(--cb-text-strong);box-shadow:inset 0 -2px 0 0 var(--cb-primary)}
+  .tab:not(.active):hover{background:var(--cb-secondary)}
+  /* toolbar */
+  .toolbar{display:flex;align-items:center;gap:8px;padding:10px;background:var(--cb-bg);
+           border-bottom:1px solid var(--cb-border)}
+  .nav{display:flex;gap:2px}
+  .btn{width:32px;height:32px;border-radius:var(--r-sm);display:grid;place-items:center;color:var(--cb-text);
+       background:transparent;cursor:default}
+  .btn:hover{background:var(--cb-secondary)}
+  .urlbar{flex:1;display:flex;align-items:center;gap:8px;background:var(--cb-surface);border:1px solid var(--cb-border);
+          border-radius:var(--r-md);padding:7px 12px;color:var(--cb-text-strong);font-size:13px}
+  .urlbar.focus{border-color:var(--cb-primary);box-shadow:0 0 0 3px color-mix(in srgb,var(--cb-primary) 25%,transparent)}
+  .lock{color:var(--cb-primary)}
+  .shield{margin-left:auto;color:var(--cb-primary);font-size:12px;display:flex;align-items:center;gap:5px}
+  /* content / new tab */
+  .content{background:var(--cb-surface);padding:34px 22px;text-align:center}
+  .content h2{font-family:var(--cb-font-head);color:var(--cb-text-strong);font-size:26px;margin:0 0 16px}
+  .search{max-width:460px;margin:0 auto;display:flex;align-items:center;gap:10px;background:var(--cb-bg);
+          border:1px solid var(--cb-border);border-radius:999px;padding:12px 18px;color:var(--cb-muted)}
+  .shortcuts{display:flex;gap:14px;justify-content:center;margin-top:22px;flex-wrap:wrap}
+  .sc{display:flex;flex-direction:column;align-items:center;gap:6px;font-size:12px;color:var(--cb-text)}
+  .sc .ic{width:46px;height:46px;border-radius:14px;background:var(--cb-surface-2);border:1px solid var(--cb-border);
+          display:grid;place-items:center;color:var(--cb-primary);font-weight:600;font-family:var(--cb-font-head)}
+  /* swatches + type */
+  section{margin-top:26px}
+  .label{font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--cb-muted);margin:0 0 10px}
+  .sw{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px}
+  .chip{border:1px solid var(--cb-border);border-radius:var(--r-md);overflow:hidden;background:var(--cb-surface)}
+  .chip .c{height:46px}.chip .n{padding:7px 9px;font-size:11px;color:var(--cb-text)}
+  .chip .n b{display:block;color:var(--cb-text-strong);font-size:12px}
+  .cta{display:inline-block;background:var(--cb-gradient);color:#fff;border:0;border-radius:var(--r-sm);
+       padding:11px 20px;font-family:var(--cb-font-ui);font-weight:600;font-size:14px;cursor:default}
+  .toggle{margin-left:auto;display:flex;gap:6px;background:var(--cb-surface);border:1px solid var(--cb-border);
+          border-radius:999px;padding:4px}
+  .toggle button{border:0;background:transparent;color:var(--cb-text);font:inherit;font-size:12px;padding:5px 12px;
+                 border-radius:999px;cursor:pointer}
+  .toggle button.on{background:var(--cb-primary);color:var(--cb-on)}
+  .note{font-size:12px;color:var(--cb-muted);margin-top:22px;border-top:1px solid var(--cb-border);padding-top:12px}
+  .type-row{font-size:15px;color:var(--cb-text);margin:2px 0}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="mark">C</div>
+    <div>
+      <h1>Cybrsoft Browser</h1>
+      <div class="sub">Identity preview — Cobal design tokens · <em>visual mockup, not the running browser</em></div>
+    </div>
+    <div class="toggle" role="group" aria-label="Theme">
+      <button id="tl" class="on" onclick="setTheme('light')">Light</button>
+      <button id="td" onclick="setTheme('dark')">Dark</button>
+    </div>
+  </header>
+
+  <div class="mock">
+    <div class="tabs">
+      <div class="tab active">● New Tab</div>
+      <div class="tab">Docs — Cybrsoft</div>
+      <div class="tab">Privacy dashboard</div>
+    </div>
+    <div class="toolbar">
+      <div class="nav"><div class="btn">‹</div><div class="btn">›</div><div class="btn">⟳</div></div>
+      <div class="urlbar focus"><span class="lock">🔒</span><span>search or enter address</span>
+        <span class="shield">🛡 12 blocked</span></div>
+      <div class="btn">☰</div>
+    </div>
+    <div class="content">
+      <h2>Your private web, your way.</h2>
+      <div class="search">🔍 <span>Search the web</span></div>
+      <div class="shortcuts">
+        <div class="sc"><div class="ic">D</div>Docs</div>
+        <div class="sc"><div class="ic">G</div>GitHub</div>
+        <div class="sc"><div class="ic">M</div>Mail</div>
+        <div class="sc"><div class="ic">+</div>Add</div>
+      </div>
+      <div style="margin-top:24px"><span class="cta">Get started</span></div>
+    </div>
+  </div>
+
+  <section>
+    <p class="label">Core palette</p>
+    <div class="sw">
+      <div class="chip"><div class="c" style="background:#3B6FE0"></div><div class="n"><b>Primary</b>#3B6FE0</div></div>
+      <div class="chip"><div class="c" style="background:#1B3A8C"></div><div class="n"><b>Deep</b>#1B3A8C</div></div>
+      <div class="chip"><div class="c" style="background:#6D9BFF"></div><div class="n"><b>Bright</b>#6D9BFF</div></div>
+      <div class="chip"><div class="c" style="background:#E4ECFF"></div><div class="n"><b>Secondary</b>#E4ECFF</div></div>
+      <div class="chip"><div class="c" style="background:#F3F6FF"></div><div class="n"><b>BG (light)</b>#F3F6FF</div></div>
+      <div class="chip"><div class="c" style="background:#4A5878"></div><div class="n"><b>Text</b>#4A5878</div></div>
+      <div class="chip"><div class="c" style="background:var(--cb-gradient)"></div><div class="n"><b>Gradient</b>135°</div></div>
+    </div>
+  </section>
+
+  <section>
+    <p class="label">Dark palette (purpose-built navy)</p>
+    <div class="sw">
+      <div class="chip"><div class="c" style="background:#0A1330"></div><div class="n"><b>BG</b>#0A1330</div></div>
+      <div class="chip"><div class="c" style="background:#0F1D4A"></div><div class="n"><b>BG alt</b>#0F1D4A</div></div>
+      <div class="chip"><div class="c" style="background:#101C42"></div><div class="n"><b>Surface</b>#101C42</div></div>
+      <div class="chip"><div class="c" style="background:#0F275E"></div><div class="n"><b>Surface 2</b>#0F275E</div></div>
+      <div class="chip"><div class="c" style="background:#22336B"></div><div class="n"><b>Accent</b>#22336B</div></div>
+      <div class="chip"><div class="c" style="background:#C7D6FF"></div><div class="n"><b>Text</b>#C7D6FF</div></div>
+    </div>
+  </section>
+
+  <section>
+    <p class="label">Typography</p>
+    <div style="font-family:var(--cb-font-head);font-weight:700;font-size:30px;color:var(--cb-text-strong)">Bricolage Grotesque — headings</div>
+    <div class="type-row" style="font-family:var(--cb-font-ui)">Inter — interface &amp; body text. The quick brown fox jumps over the lazy dog. 0123456789</div>
+  </section>
+
+  <p class="note">Mockup rendered from <code>theme/cybrsoft/tokens.css</code> values. The real chrome theme
+  lives in <code>theme/cybrsoft/userChrome.css</code> and is not yet validated against a running Firefox
+  build (blocker B1). This page illustrates identity only.</p>
+</div>
+<script>
+  function setTheme(t){document.documentElement.setAttribute('data-theme',t);
+    document.getElementById('tl').classList.toggle('on',t==='light');
+    document.getElementById('td').classList.toggle('on',t==='dark');}
+</script>
+</body>
+</html>

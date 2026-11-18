@@ -11,13 +11,18 @@ layout of upstream's `browser/branding/unofficial` and replace the assets.
 ## Required contents (to be produced in Phase 3)
 | File | Purpose | Status |
 |------|---------|--------|
-| `configure.sh` | Sets `MOZ_APP_DISPLAYNAME="Cybrsoft Browser"`, vendor, ids | TODO |
+| `configure.sh` | Sets `MOZ_APP_DISPLAYNAME="Cybrsoft Browser"`, vendor, ids | ✅ done |
+| `pref/firefox-branding.js` | Branding-scoped prefs (update URL, homepage) | ✅ done |
+| `locales/en-US/brand.ftl` | "Cybrsoft Browser" / "Cybrsoft" strings + trademark note | ✅ done |
 | `branding.nsi` | Windows installer branding strings | TODO |
-| `pref/firefox-branding.js` | Branding-scoped prefs (update URL, homepage) | TODO |
-| `locales/en-US/brand.ftl` + `brand.dtd` / `brand.properties` | "Cybrsoft Browser" / "Cybrsoft" strings used across the UI | TODO |
-| `default16/32/48/64/128.png`, `firefox.ico`, `document.ico` | App + document icons (Cobal identity) | TODO (needs brand assets) |
-| `content/about-logo*.png`, `content/firefox-wordmark.svg` | About page / wordmark | TODO |
+| `default16/32/48/64/128.png`, `firefox.ico`, `document.ico` | App + document icons (Cobal identity) | TODO — **needs brand assets** |
+| `content/about-logo*.png`, wordmark | About page / wordmark | TODO — needs brand assets |
 | `VisualElements_*.png` + manifest | Windows tile assets | TODO |
+
+> **Icons are intentionally not invented.** Per the spec, we do not fabricate an
+> official logo. The chrome theme and a text/placeholder mark carry the identity
+> until real Cybrsoft Browser icon assets are provided. A rendered identity
+> preview (colors, type, mock chrome) is at `theme/cybrsoft/preview.html`.
 
 ## Trademark note
 Mozilla's trademark policy **requires** removing Firefox/Mozilla branding in a

@@ -1,0 +1,86 @@
+/* Cybrsoft Browser — design tokens (CSS custom properties)
+ * Single source of truth for color/type in the chrome theme, new-tab page,
+ * settings, onboarding, and error pages. Values captured from the live Cobal
+ * identity — see docs/DESIGN_TOKENS.md.
+ *
+ * Light is the base; dark is a purpose-built navy palette (NOT an inversion),
+ * taken from Cobal's own dark sections. The chrome picks a theme by the
+ * prefers-color-scheme media query, which Firefox drives from the OS theme (or
+ * the manual override pref).
+ */
+
+:root {
+  /* Brand blues */
+  --cb-primary:        #3B6FE0;
+  --cb-primary-deep:   #1B3A8C;
+  --cb-primary-bright: #6D9BFF;
+  --cb-secondary:      #E4ECFF;
+
+  /* Light tints / neutrals */
+  --cb-tint-1: #EAF0FF;
+  --cb-tint-2: #D5DFF5;
+  --cb-tint-3: #C7D6FF;
+  --cb-muted:  #A5B4D8;
+
+  /* Surfaces & text (light) */
+  --cb-bg:        #F3F6FF;
+  --cb-surface:   #FFFFFF;
+  --cb-surface-2: #EAF0FF;
+  --cb-border:    #D5DFF5;
+  --cb-text:      #4A5878;
+  --cb-text-strong: #22336B;
+  --cb-text-on-primary: #FFFFFF;
+
+  /* Signature gradient — use sparingly (hero, onboarding, primary CTA) */
+  --cb-gradient: linear-gradient(135deg, #3B6FE0 0%, #1B3A8C 100%);
+
+  /* Type */
+  --cb-font-ui:      "Inter", system-ui, "Segoe UI", sans-serif;
+  --cb-font-heading: "Bricolage Grotesque", "Inter", system-ui, sans-serif;
+
+  /* Shape / motion */
+  --cb-radius-sm: 6px;
+  --cb-radius-md: 10px;
+  --cb-radius-lg: 16px;
+  --cb-focus: 0 0 0 2px #FFFFFF, 0 0 0 4px var(--cb-primary);
+  --cb-ease: cubic-bezier(0.2, 0.0, 0.2, 1);
+}
+
+/* Dark theme — purpose-built navy (Cobal dark sections). Applied when the OS
+ * (or Firefox override) requests dark. The :root:not([data-theme="light"])
+ * guard lets a manual light override win. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --cb-primary:        #6D9BFF;  /* brightened for contrast on navy */
+    --cb-primary-deep:   #3B6FE0;
+    --cb-primary-bright: #9DBBFF;
+    --cb-secondary:      #22336B;
+
+    --cb-tint-1: #101C42;
+    --cb-tint-2: #14213D;
+    --cb-tint-3: #0F275E;
+    --cb-muted:  #A5B4D8;
+
+    --cb-bg:        #0A1330;
+    --cb-surface:   #101C42;
+    --cb-surface-2: #0F275E;
+    --cb-border:    #22336B;
+    --cb-text:      #C7D6FF;
+    --cb-text-strong: #EAF0FF;
+    --cb-text-on-primary: #0A1330;
+
+    --cb-gradient: linear-gradient(135deg, #3B6FE0 0%, #0F1D4A 100%);
+    --cb-focus: 0 0 0 2px #0A1330, 0 0 0 4px var(--cb-primary);
+  }
+}
+
+/* Explicit manual overrides (settings toggle sets data-theme on :root). */
+:root[data-theme="dark"] {
+  --cb-primary: #6D9BFF; --cb-primary-deep: #3B6FE0; --cb-primary-bright: #9DBBFF;
+  --cb-secondary: #22336B;
+  --cb-tint-1: #101C42; --cb-tint-2: #14213D; --cb-tint-3: #0F275E; --cb-muted: #A5B4D8;
+  --cb-bg: #0A1330; --cb-surface: #101C42; --cb-surface-2: #0F275E;
+  --cb-border: #22336B; --cb-text: #C7D6FF; --cb-text-strong: #EAF0FF;
+  --cb-text-on-primary: #0A1330;
+  --cb-gradient: linear-gradient(135deg, #3B6FE0 0%, #0F1D4A 100%);
+}

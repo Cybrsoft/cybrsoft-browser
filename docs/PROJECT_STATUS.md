@@ -27,6 +27,11 @@ spec §21. **No feature is listed as complete without executed tests.**
 - Build/rebase/tooling docs (`BUILD.md`, `REBASE.md`, `FORK_TOOLING.md`)
 - **Self-test passing 5/5** (`selftest.sh`): config/series parsing + patch
   conflict detection verified on Linux
+- **ESR watch automation**: `check-upstream.sh` (version-compare verified on 5
+  fixtures) + weekly `esr-watch.yml` that opens a GitHub issue on a new ESR
+- **Branding + first theme pass**: `theme/cybrsoft/tokens.css` (light + navy
+  dark), `userChrome.css` chrome theme, Firefox branding files (`configure.sh`,
+  `brand.ftl`, branding prefs), and a rendered `theme/cybrsoft/preview.html`
 
 ## Decisions locked (2026-11-18)
 - **Upstream channel:** Firefox **ESR** (B3)
@@ -35,8 +40,8 @@ spec §21. **No feature is listed as complete without executed tests.**
 - **Code hosting:** public **GitHub** under a Cybrsoft org (B7) — *pending owner creating the repo*
 
 ## In progress
-- Phase 2: branding assets (icons/strings) + first chrome theme pass using the
-  Cobal tokens — next up
+- Phase 2: chrome theme (`userChrome.css`) written but **not yet validated
+  against a running build** (blocker B1); icon assets still needed from brand
 - Build infrastructure (B1) deferred — **maintainer PC lacks 40 GB; builds run
   in cloud CI, not locally.** Options in `BUILD_INFRA.md`; not needed for Phase 2
   source work
