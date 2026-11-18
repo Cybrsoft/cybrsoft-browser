@@ -1,0 +1,51 @@
+# Cybrsoft Browser — CI (build-independent verification)
+#
+# Runs on every push/PR. Verifies everything that does NOT need a Firefox build
+# (no Windows, no 40 GB): fork-tooling logic, the backup crypto, script syntax,
+# and asset validity. The full Windows build lives in build-windows.yml and is
+# gated separately on build infrastructure (blocker B1).
+
+name: ci
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Shell syntax (bash -n)
+        run: for s in build/scripts/*.sh; do bash -n "$s"; done
+
+      - name: Fork tooling self-test
+        run: bash build/scripts/selftest.sh
+
+      - name: Upstream-version check logic (fixture)
+        run: |
+          printf '{"FIREFOX_ESR":"999.0.0esr","FIREFOX_ESR_NEXT":"999.0.0esr"}' > /tmp/v.json
+          set +e
+          CB_VERSIONS_JSON=/tmp/v.json bash build/scripts/check-upstream.sh
+          code=$?
+          set -e
+          test "$code" = "10" || { echo "expected exit 10 (update available), got $code"; exit 1; }
+
+      - name: Backup crypto round-trip
+        run: node tools/backup/test.mjs
+
+      - name: Validate assets (JSON + HTML well-formedness)
+        run: python3 tools/validate.py
+
+      - name: Shellcheck (advisory)
+        run: |
+          sudo apt-get update && sudo apt-get install -y shellcheck
+          shellcheck build/scripts/*.sh || true
