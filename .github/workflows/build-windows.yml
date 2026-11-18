@@ -1,68 +1,105 @@
-# Cybrsoft Browser — Windows build (CI)
+# Cybrsoft Browser — Windows build (WarpBuild runner)
 #
-# STATUS: scaffold. This workflow is intentionally gated behind manual dispatch
-# and is NOT expected to pass yet — a full Firefox build needs ~40 GB of disk,
-# and the free GitHub-hosted Windows runner has only ~14 GB (see
-# docs/BUILD_INFRA.md). Treat this as the shape of the build; moving the same
-# steps to a larger/third-party runner or an on-demand VM is a label change.
+# Produces a real Cybrsoft Browser build + installer from pinned Firefox ESR.
+# Runs on a WarpBuild Windows runner (big disk for the ~40 GB Firefox tree;
+# GitHub's free 14 GB runner can't do it — see docs/BUILD_INFRA.md).
 #
-# It validates the fork-tooling plumbing (config, fetch, patch-apply) and marks
-# the compile step as the point where real build infra (blocker B1) is required.
+# STATUS: first-iteration workflow. A Windows Firefox CI build almost always
+# needs a tweak or two on the first run — treat the FIRST run as the
+# measurement/debug run: it reports real build time + disk so estimates become
+# facts, and surfaces any toolchain step that needs adjusting. Gated behind
+# manual dispatch so it never runs by surprise (and never bills) until you ask.
+#
+# PREREQUISITES (one-time, on your side):
+#   1. Create a WarpBuild account (warpbuild.com) — includes free starter credits.
+#   2. Install the WarpBuild GitHub App on BenDaDev/cybrsoft-browser.
+#   3. Confirm the runner label below matches a Windows runner in your WarpBuild
+#      dashboard (default here: 8 vCPU). Then run this workflow from the Actions
+#      tab ("Run workflow").
 
 name: build-windows
 on:
   workflow_dispatch:
     inputs:
-      run_compile:
-        description: "Attempt the full mach build (needs big-disk runner)"
+      upload_installer:
+        description: "Upload the built installer as an artifact"
         type: boolean
-        default: false
+        default: true
 
 permissions:
   contents: read
 
+concurrency:
+  group: build-windows
+  cancel-in-progress: false
+
 jobs:
-  tooling-check:
-    # Lint/validate the tooling on a cheap runner — no Firefox source, no build.
+  # Fast, free sanity check on Linux before spending any build minutes.
+  pre:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Shellcheck build scripts
-        run: |
-          sudo apt-get update && sudo apt-get install -y shellcheck
-          shellcheck build/scripts/*.sh || true   # advisory for now
-      - name: Validate config + series parse
+      - name: Validate tooling + pin
+        shell: bash
         run: |
           bash -n build/scripts/*.sh
           . config/cybrsoft.conf
-          echo "Pinned to Firefox ${CB_FIREFOX_VERSION}${CB_UPSTREAM_CHANNEL}"
-          test -f patches/series
+          echo "Will build Firefox ${CB_FIREFOX_VERSION}${CB_UPSTREAM_CHANNEL}"
+          test -f build/mozconfig.windows
 
   build:
-    needs: tooling-check
-    if: ${{ inputs.run_compile }}
-    # NOTE: windows-latest free runner has ~14 GB disk — too small for Firefox.
-    # Swap to a larger/third-party Windows runner (100+ GB) before enabling.
-    runs-on: windows-latest
-    timeout-minutes: 350
+    needs: pre
+    # WarpBuild Windows runner (8 vCPU). Change the size here if you pick another.
+    runs-on: warp-windows-latest-x64-8x
+    timeout-minutes: 300
     steps:
       - uses: actions/checkout@v4
-      - name: Install MozillaBuild + toolchain
-        run: echo "TODO: install MozillaBuild; see docs/BUILD.md. Blocker B1."
-      - name: Fetch pinned Firefox ESR source
+
+      # Firefox will not build under a path with spaces — use a short root.
+      - name: Prepare build root
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force -Path C:\cb | Out-Null
+          Copy-Item -Recurse -Force * C:\cb\
+          "CB_ROOT=C:\cb" | Out-File -FilePath $env:GITHUB_ENV -Append
+
+      - name: Install MozillaBuild
+        shell: pwsh
+        run: |
+          $url = "https://ftp.mozilla.org/pub/mozilla/libraries/win32/MozillaBuildSetup-Latest.exe"
+          Invoke-WebRequest -Uri $url -OutFile mozbuild.exe
+          Start-Process -Wait -FilePath .\mozbuild.exe -ArgumentList "/S"
+          echo "MozillaBuild installed to C:\mozilla-build"
+
+      - name: Record start time + disk
         shell: bash
-        run: build/scripts/fetch-source.sh
-      - name: Apply Cybrsoft patch queue
+        run: |
+          echo "BUILD_START=$(date +%s)" >> "$GITHUB_ENV"
+          echo "=== disk before ==="; df -h || true
+
+      - name: Fetch + patch + build + package
+        shell: cmd
+        # Run the whole pipeline inside the MozillaBuild bash environment, which
+        # provides python/mercurial/make and the correct shell for mach.
+        run: |
+          C:\mozilla-build\start-shell.bat -c "cd /c/cb && \
+            build/scripts/fetch-source.sh && \
+            build/scripts/apply-patches.sh && \
+            build/scripts/build.sh && \
+            ( [ '${{ inputs.upload_installer }}' = 'true' ] && build/scripts/package.sh || true )"
+
+      - name: Report build time + disk
+        if: always()
         shell: bash
-        run: build/scripts/apply-patches.sh
-      - name: Build
-        shell: bash
-        run: build/scripts/build.sh
-      - name: Package installer
-        shell: bash
-        run: build/scripts/package.sh
-      - name: Upload installer artifact
+        run: |
+          end=$(date +%s)
+          echo "=== BUILD TIME: $(( (end - BUILD_START) / 60 )) min ==="
+          echo "=== disk after ==="; df -h || true
+
+      - name: Upload installer
+        if: ${{ inputs.upload_installer }}
         uses: actions/upload-artifact@v4
         with:
           name: cybrsoft-browser-windows
-          path: engine/obj-*/dist/install/**/*
+          path: C:/cb/engine/obj-*/dist/install/**/*
+          if-no-files-found: warn

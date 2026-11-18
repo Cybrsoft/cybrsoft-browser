@@ -75,6 +75,24 @@ single measurement replaces every estimate above and tells us the true per-build
 cost. Everything in this repo (`fetch-source.sh` → `apply-patches.sh` →
 `build.sh` → `package.sh`) is ready to drive it.
 
+## Decision: WarpBuild (2026-11-18)
+Chosen for the first build: a WarpBuild Windows runner — cheapest per minute, no
+GitHub plan upgrade, and free starter credits to measure build #1 at ~$0.
+`.github/workflows/build-windows.yml` is wired for it (8 vCPU label).
+
+### One-time setup (owner)
+1. Create a **WarpBuild account** at <https://warpbuild.com> (free starter credits).
+2. Install the **WarpBuild GitHub App** on `BenDaDev/cybrsoft-browser`.
+3. In WarpBuild, confirm a Windows runner matching the workflow label
+   `warp-windows-latest-x64-8x` (change the label in the workflow for another size).
+4. GitHub → **Actions** → **build-windows** → **Run workflow**.
+
+### First run = the measurement run
+A Windows Firefox CI build almost always needs a tweak on the first attempt
+(toolchain/path quirks). The first run's job is to (a) surface anything to fix
+and (b) print the **real build time + disk** (the workflow logs both), replacing
+the estimates in this doc. Expect to iterate once or twice; that's normal.
+
 ## Status
-Options compared (above). Awaiting owner's choice of runner to wire
-`build-windows.yml` and run the first measured build.
+WarpBuild selected; `build-windows.yml` wired. Awaiting owner's WarpBuild
+account + GitHub App install, then the first (measurement) run.
