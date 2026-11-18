@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Privacy Dashboard — Cybrsoft Browser</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{--cb-primary:#3B6FE0;--cb-deep:#1B3A8C;--cb-bright:#6D9BFF;--cb-secondary:#E4ECFF;
+    --cb-bg:#F3F6FF;--cb-surface:#FFF;--cb-surface2:#EAF0FF;--cb-border:#D5DFF5;
+    --cb-text:#4A5878;--cb-strong:#22336B;--cb-muted:#A5B4D8;--cb-on:#fff;
+    --cb-grad:linear-gradient(135deg,#3B6FE0,#1B3A8C);
+    --ad:#E0663B;--fp:#8B5CF6;--ck:#2FB5A8;--tr:#3B6FE0;
+    --f-ui:"Inter",system-ui,sans-serif;--f-h:"Bricolage Grotesque",sans-serif;--r:14px}
+  :root[data-theme="dark"]{--cb-primary:#6D9BFF;--cb-deep:#3B6FE0;--cb-secondary:#22336B;
+    --cb-bg:#0A1330;--cb-surface:#101C42;--cb-surface2:#0F275E;--cb-border:#22336B;
+    --cb-text:#C7D6FF;--cb-strong:#EAF0FF;--cb-muted:#A5B4D8;--cb-on:#0A1330;
+    --cb-grad:linear-gradient(135deg,#3B6FE0,#0F1D4A);
+    --ad:#F08A63;--fp:#A98BFF;--ck:#4BD6C8;--tr:#6D9BFF}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--cb-bg);color:var(--cb-text);font-family:var(--f-ui);padding:0 0 40px}
+  .top{background:var(--cb-grad);color:#fff;padding:20px 26px}
+  .top .wrap{max-width:1000px;margin:0 auto;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+  .mark{width:36px;height:36px;border-radius:10px;background:rgba(255,255,255,.18);display:grid;place-items:center;font-family:var(--f-h);font-weight:700;font-size:20px}
+  .top h1{font-family:var(--f-h);font-weight:700;margin:0;font-size:19px}
+  .top .site{font-size:13px;opacity:.9}
+  .badge{margin-left:auto;background:rgba(255,255,255,.16);border-radius:999px;padding:6px 13px;font-size:12px;font-weight:600;display:flex;gap:7px;align-items:center}
+  .theme{background:rgba(255,255,255,.16);border:0;color:#fff;border-radius:999px;padding:6px 12px;font:inherit;font-size:12px;cursor:pointer}
+  .wrap{max-width:1000px;margin:0 auto;padding:0 26px}
+  .banner{background:var(--cb-surface2);border:1px solid var(--cb-border);border-radius:10px;padding:10px 14px;font-size:12px;color:var(--cb-text);margin:16px 0}
+  .banner b{color:var(--cb-strong)}
+  .scope{display:flex;gap:6px;margin:16px 0}
+  .scope button{border:1px solid var(--cb-border);background:var(--cb-surface);color:var(--cb-text);font:inherit;font-size:13px;padding:7px 14px;border-radius:999px;cursor:pointer}
+  .scope button.on{background:var(--cb-primary);color:#fff;border-color:var(--cb-primary)}
+  .tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+  @media(max-width:720px){.tiles{grid-template-columns:repeat(2,1fr)}}
+  .tile{background:var(--cb-surface);border:1px solid var(--cb-border);border-radius:var(--r);padding:16px}
+  .tile .n{font-family:var(--f-h);font-weight:700;font-size:30px;color:var(--cb-strong);line-height:1}
+  .tile .l{font-size:12px;color:var(--cb-muted);margin-top:7px;display:flex;align-items:center;gap:6px}
+  .dot{width:9px;height:9px;border-radius:3px;display:inline-block}
+  .card{background:var(--cb-surface);border:1px solid var(--cb-border);border-radius:var(--r);padding:18px 20px;margin-top:14px}
+  .card h2{font-family:var(--f-h);color:var(--cb-strong);font-size:16px;margin:0 0 14px}
+  .bar{display:flex;align-items:center;gap:10px;margin:9px 0;font-size:13px}
+  .bar .name{width:120px;color:var(--cb-text);display:flex;align-items:center;gap:7px}
+  .bar .track{flex:1;height:10px;background:var(--cb-surface2);border-radius:999px;overflow:hidden}
+  .bar .fill{height:100%;border-radius:999px}
+  .bar .v{width:40px;text-align:right;color:var(--cb-strong);font-weight:600}
+  .cols{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  @media(max-width:760px){.cols{grid-template-columns:1fr}}
+  .item{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--cb-border);font-size:13px}
+  .item:last-child{border-bottom:0}
+  .item .host{flex:1;color:var(--cb-strong);font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .item .why{font-size:11px;color:var(--cb-muted)}
+  .chip{font-size:11px;padding:2px 8px;border-radius:999px;color:#fff;font-weight:600}
+  .row{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--cb-border)}
+  .row:last-child{border-bottom:0}.row .meta{flex:1}.row .t{font-weight:600;color:var(--cb-strong);font-size:14px}.row .d{font-size:12px;color:var(--cb-muted);margin-top:2px}
+  .sw{width:42px;height:24px;border-radius:999px;background:var(--cb-border);position:relative;cursor:pointer;flex-shrink:0}
+  .sw.on{background:var(--cb-primary)}.sw::after{content:"";position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:#fff;transition:.15s}.sw.on::after{left:21px}
+  .btn{font:inherit;font-weight:600;font-size:13px;border:1px solid var(--cb-border);background:var(--cb-surface);color:var(--cb-text);border-radius:9px;padding:8px 14px;cursor:pointer}
+  .btn.warn{border-color:var(--ad);color:var(--ad)}
+  .perm{display:flex;align-items:center;gap:10px;padding:8px 0;font-size:13px;border-bottom:1px solid var(--cb-border)}
+  .perm:last-child{border-bottom:0}.perm .ic{width:26px}.perm .p{flex:1;color:var(--cb-strong)}
+  .perm .st{font-size:12px;color:var(--cb-muted)}
+  .muted{font-size:12px;color:var(--cb-muted)}
+</style>
+</head>
+<body>
+<div class="top"><div class="wrap">
+  <div class="mark">C</div>
+  <div><h1>Privacy Dashboard</h1><div class="site">Viewing: <strong id="site">example-news.com</strong></div></div>
+  <span class="badge">🛡 Strict</span>
+  <button class="theme" onclick="t()">◐ theme</button>
+</div></div>
+
+<div class="wrap">
+  <div class="banner">👁 <b>Preview — sample data.</b> In the browser, every number here comes from the
+    <b>real</b> content-blocking log and uBlock Origin — Cybrsoft never fabricates statistics (spec §9).
+    This mockup shows the layout with illustrative values.</div>
+
+  <div class="scope" id="scope">
+    <button class="on" onclick="setScope('site',this)">This site</button>
+    <button onclick="setScope('today',this)">Today</button>
+    <button onclick="setScope('all',this)">All time</button>
+  </div>
+
+  <div class="tiles" id="tiles"></div>
+
+  <div class="card">
+    <h2>What was blocked</h2>
+    <div id="bars"></div>
+  </div>
+
+  <div class="cols">
+    <div class="card">
+      <h2>Blocked requests — why</h2>
+      <div id="blocked"></div>
+    </div>
+    <div class="card">
+      <h2>This site</h2>
+      <div class="row"><div class="meta"><div class="t">Protection</div><div class="d">Turn off for example-news.com only.</div></div><div class="sw on" onclick="tog(this)"></div></div>
+      <div class="row"><div class="meta"><div class="t">Strong anti-fingerprinting (RFP)</div><div class="d">Disable if this site misbehaves.</div></div><div class="sw on" onclick="tog(this)"></div></div>
+      <div class="row"><div class="meta"><div class="t">Cookie-popup blocking</div></div><div class="sw on" onclick="tog(this)"></div></div>
+      <div style="margin-top:12px;display:flex;gap:9px;flex-wrap:wrap">
+        <button class="btn warn" onclick="alert('Prototype: would pause protection for this site for 1 hour.')">Pause for this site</button>
+        <button class="btn" onclick="alert('Prototype: opens the per-site exceptions list.')">Manage exceptions</button>
+      </div>
+      <p class="muted" style="margin-top:12px">If a site breaks, we point at the likely protection and offer a scoped exception — protection is never silently disabled.</p>
+    </div>
+  </div>
+
+  <div class="cols">
+    <div class="card">
+      <h2>Cookies &amp; storage</h2>
+      <div class="row"><div class="meta"><div class="t">Isolated to this site (TCP)</div><div class="d">Third-party state partitioned.</div></div><b id="ckcount" style="color:var(--cb-strong)">—</b></div>
+      <div class="row"><div class="meta"><div class="t">Third-party cookies rejected</div></div><b id="ckrej" style="color:var(--cb-strong)">—</b></div>
+      <button class="btn" style="margin-top:12px" onclick="alert('Prototype: clears cookies/storage for this site.')">Clear site data</button>
+    </div>
+    <div class="card">
+      <h2>Site permissions</h2>
+      <div class="perm"><span class="ic">📍</span><span class="p">Location</span><span class="st">Blocked</span></div>
+      <div class="perm"><span class="ic">📷</span><span class="p">Camera</span><span class="st">Ask</span></div>
+      <div class="perm"><span class="ic">🎤</span><span class="p">Microphone</span><span class="st">Ask</span></div>
+      <div class="perm"><span class="ic">🔔</span><span class="p">Notifications</span><span class="st">Blocked</span></div>
+      <div class="perm"><span class="ic">🖥</span><span class="p">Pop-ups</span><span class="st">Blocked</span></div>
+    </div>
+  </div>
+
+  <p class="muted" style="margin-top:18px;text-align:center">
+    Data source in-browser: content-blocking event log + uBlock Origin logger + permissions &amp; cookie managers
+    (ARCHITECTURE §6.4). Where a value can't be reliably obtained, the real dashboard shows
+    “not available” rather than a guess.</p>
+</div>
+
+<script>
+  // SAMPLE data only — illustrates layout. The shipped dashboard reads real data.
+  const SAMPLE={
+    site:{trackers:14,ads:9,fingerprinters:2,cookies:6,cookiesRejected:11,
+      cats:{Trackers:14,Ads:9,Fingerprinters:2,"Cookie popups":3},
+      blocked:[
+        {h:"ads.doubleclick.net",c:"Ad",reason:"EasyList"},
+        {h:"www.google-analytics.com",c:"Tracker",reason:"EasyPrivacy"},
+        {h:"connect.facebook.net",c:"Tracker",reason:"Social tracking"},
+        {h:"fingerprintjs.com",c:"Fingerprinter",reason:"Fingerprinting list"},
+        {h:"cdn.cookielaw.org",c:"Cookie popup",reason:"Annoyances list"},
+        {h:"px.ads.linkedin.com",c:"Ad",reason:"EasyList"}
+      ]},
+    today:{trackers:212,ads:148,fingerprinters:23,cookies:64,cookiesRejected:181,cats:{Trackers:212,Ads:148,Fingerprinters:23,"Cookie popups":41},blocked:[]},
+    all:{trackers:18433,ads:11920,fingerprinters:1507,cookies:5120,cookiesRejected:15002,cats:{Trackers:18433,Ads:11920,Fingerprinters:1507,"Cookie popups":3310},blocked:[]}
+  };
+  const CATCOLOR={Trackers:"var(--tr)",Ads:"var(--ad)",Fingerprinters:"var(--fp)","Cookie popups":"var(--ck)"};
+  const CHIP={Ad:"var(--ad)",Tracker:"var(--tr)",Fingerprinter:"var(--fp)","Cookie popup":"var(--ck)"};
+  let scope='site';
+  function d(){return SAMPLE[scope];}
+  function tiles(){
+    const x=d();const T=[["Trackers",x.trackers,"var(--tr)"],["Ads",x.ads,"var(--ad)"],
+      ["Fingerprinters",x.fingerprinters,"var(--fp)"],["Cookies isolated",x.cookies,"var(--ck)"]];
+    document.getElementById('tiles').innerHTML=T.map(([l,n,c])=>
+      `<div class="tile"><div class="n">${n.toLocaleString()}</div><div class="l"><span class="dot" style="background:${c}"></span>${l}</div></div>`).join('');
+    document.getElementById('ckcount').textContent=x.cookies;
+    document.getElementById('ckrej').textContent=x.cookiesRejected;
+  }
+  function bars(){
+    const c=d().cats;const max=Math.max(...Object.values(c),1);
+    document.getElementById('bars').innerHTML=Object.entries(c).map(([k,v])=>
+      `<div class="bar"><span class="name"><span class="dot" style="background:${CATCOLOR[k]}"></span>${k}</span>
+        <span class="track"><span class="fill" style="width:${Math.round(v/max*100)}%;background:${CATCOLOR[k]}"></span></span>
+        <span class="v">${v.toLocaleString()}</span></div>`).join('');
+  }
+  function blocked(){
+    const b=d().blocked;
+    document.getElementById('blocked').innerHTML = b.length? b.map(i=>
+      `<div class="item"><span class="chip" style="background:${CHIP[i.c]}">${i.c}</span>
+        <span class="host">${i.h}</span><span class="why">${i.reason}</span></div>`).join('')
+      : `<p class="muted">Per-request detail is shown for the current site. Switch to “This site”.</p>`;
+  }
+  function setScope(s,el){scope=s;[...el.parentNode.children].forEach(b=>b.classList.remove('on'));el.classList.add('on');tiles();bars();blocked();}
+  function tog(el){el.classList.toggle('on');}
+  function t(){const r=document.documentElement;r.setAttribute('data-theme',r.getAttribute('data-theme')==='dark'?'light':'dark');}
+  tiles();bars();blocked();
+</script>
+</body>
+</html>

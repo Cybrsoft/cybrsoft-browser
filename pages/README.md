@@ -10,6 +10,8 @@ built from Firefox's HTML/JS frontend and styled with the design tokens
 | First-run onboarding | `onboarding/index.html` | Search-engine choice (no imposed default), privacy level, theme, tab layout |
 | New tab | `newtab/index.html` | Minimal default: search + optional shortcuts + real-data protection indicator |
 | Settings | `settings/index.html` | Privacy (applies the profile bundles), Appearance, Search, Tabs/Workspaces, Downloads, Updates, Backup, Extensions, About |
+| Privacy dashboard (full) | `dashboard/index.html` | Flagship (spec §9): blocked trackers/ads/fingerprinters, why-blocked, per-site controls, cookies, permissions |
+| Privacy panel (toolbar) | `dashboard/panel.html` | Compact popup: this-site counts, quick pause, report breakage, link to full dashboard |
 | Search engines | `search-engines.json` | The engine list the wizard/settings read; `default: null` (user must choose) |
 
 ## Status (honest)

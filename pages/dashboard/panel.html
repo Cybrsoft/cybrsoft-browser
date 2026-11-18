@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Protection — Cybrsoft Browser</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{--cb-primary:#3B6FE0;--cb-deep:#1B3A8C;--cb-secondary:#E4ECFF;--cb-bg:#F3F6FF;--cb-surface:#FFF;
+    --cb-surface2:#EAF0FF;--cb-border:#D5DFF5;--cb-text:#4A5878;--cb-strong:#22336B;--cb-muted:#A5B4D8;
+    --cb-grad:linear-gradient(135deg,#3B6FE0,#1B3A8C);--tr:#3B6FE0;--ad:#E0663B;--fp:#8B5CF6;--ck:#2FB5A8;
+    --f-ui:"Inter",system-ui,sans-serif;--f-h:"Bricolage Grotesque",sans-serif}
+  :root[data-theme="dark"]{--cb-primary:#6D9BFF;--cb-secondary:#22336B;--cb-bg:#0A1330;--cb-surface:#101C42;
+    --cb-surface2:#0F275E;--cb-border:#22336B;--cb-text:#C7D6FF;--cb-strong:#EAF0FF;--cb-muted:#A5B4D8;
+    --cb-grad:linear-gradient(135deg,#3B6FE0,#0F1D4A);--tr:#6D9BFF;--ad:#F08A63;--fp:#A98BFF;--ck:#4BD6C8}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:var(--f-ui);background:var(--cb-bg);color:var(--cb-text)}
+  .panel{width:320px;background:var(--cb-surface);border:1px solid var(--cb-border);border-radius:14px;overflow:hidden;margin:10px auto;box-shadow:0 14px 44px rgba(16,28,66,.18)}
+  .head{background:var(--cb-grad);color:#fff;padding:14px 16px}
+  .head .s{font-size:12px;opacity:.9}
+  .head .row{display:flex;align-items:center;gap:10px}
+  .head .t{font-family:var(--f-h);font-weight:700;font-size:15px}
+  .onoff{margin-left:auto;display:flex;align-items:center;gap:8px;font-size:12px}
+  .sw{width:40px;height:22px;border-radius:999px;background:rgba(255,255,255,.35);position:relative;cursor:pointer}
+  .sw.on{background:#fff}.sw::after{content:"";position:absolute;top:3px;left:3px;width:16px;height:16px;border-radius:50%;background:#1B3A8C;transition:.15s}.sw.on::after{left:21px;background:#3B6FE0}
+  .big{padding:16px;text-align:center}
+  .big .n{font-family:var(--f-h);font-weight:700;font-size:40px;color:var(--cb-strong);line-height:1}
+  .big .l{font-size:12px;color:var(--cb-muted);margin-top:4px}
+  .mini{display:flex;gap:8px;padding:0 16px 14px}
+  .mini .m{flex:1;background:var(--cb-surface2);border-radius:10px;padding:9px;text-align:center}
+  .mini .m b{display:block;color:var(--cb-strong);font-family:var(--f-h);font-size:17px}
+  .mini .m span{font-size:10px;color:var(--cb-muted)}
+  .dot{width:8px;height:8px;border-radius:2px;display:inline-block;margin-right:4px}
+  .acts{border-top:1px solid var(--cb-border)}
+  .acts button{width:100%;text-align:left;background:transparent;border:0;border-bottom:1px solid var(--cb-border);
+    padding:12px 16px;font:inherit;font-size:13px;color:var(--cb-text);cursor:pointer;display:flex;align-items:center;gap:10px}
+  .acts button:last-child{border-bottom:0}.acts button:hover{background:var(--cb-surface2)}
+  .acts .go{color:var(--cb-primary);font-weight:600}
+  .note{font-size:11px;color:var(--cb-muted);padding:10px 16px;text-align:center}
+  .theme{position:absolute;top:8px;right:10px;background:rgba(255,255,255,.2);border:0;color:#fff;border-radius:999px;font-size:11px;padding:3px 8px;cursor:pointer}
+</style>
+</head>
+<body>
+<div class="panel">
+  <div class="head" style="position:relative">
+    <button class="theme" onclick="t()">◐</button>
+    <div class="row"><div><div class="t">example-news.com</div><div class="s">🛡 Strict protection</div></div>
+      <div class="onoff">On<div class="sw on" onclick="this.classList.toggle('on')"></div></div></div>
+  </div>
+  <div class="big"><div class="n">25</div><div class="l">items blocked on this site</div></div>
+  <div class="mini">
+    <div class="m"><b style="color:var(--tr)">14</b><span><span class="dot" style="background:var(--tr)"></span>Trackers</span></div>
+    <div class="m"><b style="color:var(--ad)">9</b><span><span class="dot" style="background:var(--ad)"></span>Ads</span></div>
+    <div class="m"><b style="color:var(--fp)">2</b><span><span class="dot" style="background:var(--fp)"></span>Fingerprint</span></div>
+  </div>
+  <div class="acts">
+    <button onclick="alert('Prototype: pause protection on this site for 1 hour.')">⏸ Pause on this site</button>
+    <button onclick="alert('Prototype: report this site as broken (helps tune protection).')">⚠ Report site breakage</button>
+    <button class="go" onclick="location.href='index.html'">📊 Open full privacy dashboard →</button>
+  </div>
+  <div class="note">Sample data. The browser shows your real blocked activity (spec §9).</div>
+</div>
+<script>function t(){const r=document.documentElement;r.setAttribute('data-theme',r.getAttribute('data-theme')==='dark'?'light':'dark');}</script>
+</body>
+</html>
