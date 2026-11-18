@@ -1,0 +1,68 @@
+# Cybrsoft Browser — Windows build (CI)
+#
+# STATUS: scaffold. This workflow is intentionally gated behind manual dispatch
+# and is NOT expected to pass yet — a full Firefox build needs ~40 GB of disk,
+# and the free GitHub-hosted Windows runner has only ~14 GB (see
+# docs/BUILD_INFRA.md). Treat this as the shape of the build; moving the same
+# steps to a larger/third-party runner or an on-demand VM is a label change.
+#
+# It validates the fork-tooling plumbing (config, fetch, patch-apply) and marks
+# the compile step as the point where real build infra (blocker B1) is required.
+
+name: build-windows
+on:
+  workflow_dispatch:
+    inputs:
+      run_compile:
+        description: "Attempt the full mach build (needs big-disk runner)"
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+jobs:
+  tooling-check:
+    # Lint/validate the tooling on a cheap runner — no Firefox source, no build.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Shellcheck build scripts
+        run: |
+          sudo apt-get update && sudo apt-get install -y shellcheck
+          shellcheck build/scripts/*.sh || true   # advisory for now
+      - name: Validate config + series parse
+        run: |
+          bash -n build/scripts/*.sh
+          . config/cybrsoft.conf
+          echo "Pinned to Firefox ${CB_FIREFOX_VERSION}${CB_UPSTREAM_CHANNEL}"
+          test -f patches/series
+
+  build:
+    needs: tooling-check
+    if: ${{ inputs.run_compile }}
+    # NOTE: windows-latest free runner has ~14 GB disk — too small for Firefox.
+    # Swap to a larger/third-party Windows runner (100+ GB) before enabling.
+    runs-on: windows-latest
+    timeout-minutes: 350
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install MozillaBuild + toolchain
+        run: echo "TODO: install MozillaBuild; see docs/BUILD.md. Blocker B1."
+      - name: Fetch pinned Firefox ESR source
+        shell: bash
+        run: build/scripts/fetch-source.sh
+      - name: Apply Cybrsoft patch queue
+        shell: bash
+        run: build/scripts/apply-patches.sh
+      - name: Build
+        shell: bash
+        run: build/scripts/build.sh
+      - name: Package installer
+        shell: bash
+        run: build/scripts/package.sh
+      - name: Upload installer artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: cybrsoft-browser-windows
+          path: engine/obj-*/dist/install/**/*

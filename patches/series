@@ -1,0 +1,20 @@
+# Cybrsoft Browser — patch series (applied in this order by apply-patches.sh)
+#
+# Keep this list MINIMAL. Every source patch is a recurring rebase cost and a
+# potential security regression. Prefer, in order:
+#   1. prefs/cybrsoft.js        (user-overridable defaults)
+#   2. autoconfig/cybrsoft.cfg  (locked prefs)
+#   3. theme CSS / branding     (config, not code)
+#   4. a source patch HERE      (last resort, for things the above can't do)
+#
+# Each entry is a path under patches/ relative to this file. Blank lines and
+# lines starting with # are ignored.
+#
+# No source patches are committed yet — Phase 2 adds them against the real
+# engine tree (branding strings, chrome CSS injection) once fetch-source.sh has
+# pulled Firefox 153esr. Until then, the telemetry/privacy work is done entirely
+# via the pref + autoconfig overlays, which need no patching.
+#
+# Example (added later):
+# 0001-branding-strings.patch
+# 0002-inject-cybrsoft-chrome-css.patch

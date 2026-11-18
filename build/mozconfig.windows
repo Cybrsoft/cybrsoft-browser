@@ -1,0 +1,33 @@
+# Cybrsoft Browser — Windows build configuration (mozconfig)
+# Consumed by mach via MOZCONFIG. Keep minimal; prefer prefs/autoconfig over
+# compile flags where possible (lower rebase cost).
+
+# --- Branding ---
+ac_add_options --with-branding=browser/branding/cybrsoft
+ac_add_options --with-app-name=cybrsoft
+ac_add_options --with-app-basename=Cybrsoft
+
+# --- Build type: optimized release, no debug ---
+ac_add_options --enable-release
+ac_add_options --enable-optimize
+ac_add_options --disable-debug
+
+# --- Privacy: compile OUT data-reporting machinery entirely ---
+# (Belt-and-braces with the pref/autoconfig kill-list; compiling it out means
+#  it cannot be re-enabled by a pref.)
+ac_add_options --disable-crashreporter
+ac_add_options MOZ_TELEMETRY_REPORTING=
+ac_add_options MOZ_DATA_REPORTING=
+ac_add_options --disable-parental-controls
+
+# --- No Mozilla services wiring ---
+# Update URL etc. are set to Cybrsoft's own endpoints during branding; never
+# Mozilla's. (Keys for Mozilla services are intentionally absent.)
+
+# --- Reproducibility / output ---
+mk_add_options MOZ_OBJDIR=@TOPSRCDIR@/obj-cybrsoft-release
+ac_add_options --enable-update-channel=release
+
+# --- Windows specifics ---
+# The MSVC/clang toolchain is provided by `mach bootstrap` + MozillaBuild.
+# Do NOT put the source tree or MozillaBuild under a path containing spaces.

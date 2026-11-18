@@ -1,4 +1,6 @@
 # Build output / engine source (never commit the Firefox tree or build artifacts)
+/engine/
+/.cache/
 /firefox-source/
 /obj-*/
 /dist/
