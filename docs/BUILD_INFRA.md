@@ -82,7 +82,7 @@ GitHub plan upgrade, and free starter credits to measure build #1 at ~$0.
 
 ### One-time setup (owner)
 1. Create a **WarpBuild account** at <https://warpbuild.com> (free starter credits).
-2. Install the **WarpBuild GitHub App** on `BenDaDev/cybrsoft-browser`.
+2. Install the **WarpBuild GitHub App** on `Cybrsoft/cybrsoft-browser`.
 3. In WarpBuild, confirm a Windows runner matching the workflow label
    `warp-windows-latest-x64-8x` (change the label in the workflow for another size).
 4. GitHub → **Actions** → **build-windows** → **Run workflow**.

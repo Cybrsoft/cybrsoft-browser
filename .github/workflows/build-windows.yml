@@ -12,7 +12,7 @@
 #
 # PREREQUISITES (one-time, on your side):
 #   1. Create a WarpBuild account (warpbuild.com) — includes free starter credits.
-#   2. Install the WarpBuild GitHub App on BenDaDev/cybrsoft-browser.
+#   2. Install the WarpBuild GitHub App on Cybrsoft/cybrsoft-browser.
 #   3. Confirm the runner label below matches a Windows runner in your WarpBuild
 #      dashboard (default here: 8 vCPU). Then run this workflow from the Actions
 #      tab ("Run workflow").
