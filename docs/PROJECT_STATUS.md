@@ -56,9 +56,15 @@ spec §21. **No feature is listed as complete without executed tests.**
   — **11/11 tests passing** (encryption, wrong-password, tamper detection)
 
 **Phase 7 — CI**
-- `.github/workflows/ci.yml` verifies the repo on every push (selftest,
-  upstream check, backup crypto, script syntax, JSON+HTML validation) — no build needed
+- `.github/workflows/ci.yml` verifies the repo on every push via
+  `tools/run-tests.sh` (selftest, module tests, upstream check, validation) — no build needed
 - `tools/validate.py` asset validator
+
+**Feature logic modules (`src/`) — tested, engine-independent**
+- `src/workspaces/` workspaces state engine (real tab-sets) — **20 tests**
+- `src/privacy/` dashboard aggregation (real data, never fabricates) — **16 tests**
+- `src/search/` omnibox navigate-vs-search + query building — **23 tests**
+- `src/shortcuts/` keyboard-shortcut validation (+ validates shipped config) — **11 tests**
 
 ## Decisions locked (2026-11-18)
 - **Upstream channel:** Firefox **ESR** (B3)
@@ -100,9 +106,10 @@ stable · B4 update server · B5 brand capture · B6 team/cadence commitment.
 - `build/scripts/selftest.sh` → **5/5 passed** (Linux).
 - `build/scripts/check-upstream.sh` version-compare → **5/5 fixtures passed**.
 - `bash -n` syntax check: **all 8 scripts pass.**
-- `node tools/backup/test.mjs` → **11/11 passed** (backup crypto round-trip).
-- `python3 tools/validate.py` → **OK** (2 JSON, 7 HTML pages well-formed).
-- CI (`.github/workflows/ci.yml`) runs all of the above on every push.
+- `bash tools/run-tests.sh` → **ALL PASSED** (2026-11-19): backup 11, workspaces
+  20, privacy 16, search 23, shortcuts 11, fork-tooling selftest 5, asset
+  validation OK.
+- CI (`.github/workflows/ci.yml`) runs the full suite on every push.
 - **NOT yet executed** (need Windows + ~40 GB, blocker B1): `fetch-source.sh`
   against the real 153esr tarball, `build.sh`, `package.sh`, and wiring the UI
   pages / theme / prefs into a running build. No compiled binary exists yet —

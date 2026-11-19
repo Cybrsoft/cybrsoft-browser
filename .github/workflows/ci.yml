@@ -24,11 +24,8 @@ jobs:
         with:
           node-version: "22"
 
-      - name: Shell syntax (bash -n)
-        run: for s in build/scripts/*.sh; do bash -n "$s"; done
-
-      - name: Fork tooling self-test
-        run: bash build/scripts/selftest.sh
+      - name: Full test suite (tooling, modules, assets)
+        run: bash tools/run-tests.sh
 
       - name: Upstream-version check logic (fixture)
         run: |
@@ -38,12 +35,6 @@ jobs:
           code=$?
           set -e
           test "$code" = "10" || { echo "expected exit 10 (update available), got $code"; exit 1; }
-
-      - name: Backup crypto round-trip
-        run: node tools/backup/test.mjs
-
-      - name: Validate assets (JSON + HTML well-formedness)
-        run: python3 tools/validate.py
 
       - name: Shellcheck (advisory)
         run: |
