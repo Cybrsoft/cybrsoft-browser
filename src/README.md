@@ -7,12 +7,20 @@ compiler exists, and keeps the UI pages (`pages/`) thin.
 
 | Module | What | Tests |
 |--------|------|-------|
-| `workspaces/workspaces.mjs` | Workspaces state engine — real persisted tab-sets (create/rename/remove/switch, atomic tab moves, serialize for profile + backup) | 20 |
-| `privacy/aggregate.mjs` | Privacy-dashboard aggregation — turns raw engine block-events into the dashboard numbers. **Only counts what it's given; never fabricates** (spec §9) | 16 |
-| `search/search.mjs` | Omnibox logic — navigate-vs-search decision + search-URL building for the chosen engine (no imposed default) | 23 |
-| `shortcuts/validate.mjs` | Keyboard-shortcut validation — chord parsing, duplicate-binding/id detection; guards rebinds and the shipped config | 11 |
+| `workspaces/` | Workspaces state engine — real persisted tab-sets, atomic tab moves, serialize | 20 |
+| `privacy/` | Dashboard aggregation — raw block-events → numbers. **Only counts what it's given; never fabricates** (§9) | 16 |
+| `search/` | Omnibox — navigate-vs-search + per-engine query building (no imposed default) | 23 |
+| `shortcuts/` | Keyboard-shortcut validation — chord parsing, duplicate detection; guards the shipped config | 11 |
+| `bookmarks/` | Bookmark tree — safe move (no cycles), subtree remove, search, serialize | 17 |
+| `history/` | Local history — dedupe, frecency ranking for suggestions, query/recent | 14 |
+| `downloads/` | Download state machine — queued→active↔paused→done/failed/canceled, progress/speed/percent | 20 |
+| `permissions/` | Per-site website permissions — privacy-leaning defaults, effective-state resolution | 15 |
+| `exceptions/` | Per-site privacy exceptions — scoped override + pause-with-expiry; never weakens other sites (§8) | 13 |
+| `theme/` | Theme resolution — system/light/dark + accent validation (§5) | 12 |
+| `profiles/` | Multi-profile registry + **isolation** guarantee (distinct data namespaces, §13) | 13 |
+| `integration/` | Full-profile **encrypted backup round-trip** across every module | 9 |
 
-Run all tests: `bash tools/run-tests.sh` (also run in CI).
+Run all tests: `bash tools/run-tests.sh` or `npm test` (also run in CI). ~194 unit tests.
 
 ## How these connect to the UI
 The pages in `pages/` are standalone prototypes with inlined logic for previewing.

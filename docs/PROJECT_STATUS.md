@@ -60,11 +60,14 @@ spec §21. **No feature is listed as complete without executed tests.**
   `tools/run-tests.sh` (selftest, module tests, upstream check, validation) — no build needed
 - `tools/validate.py` asset validator
 
-**Feature logic modules (`src/`) — tested, engine-independent**
-- `src/workspaces/` workspaces state engine (real tab-sets) — **20 tests**
-- `src/privacy/` dashboard aggregation (real data, never fabricates) — **16 tests**
-- `src/search/` omnibox navigate-vs-search + query building — **23 tests**
-- `src/shortcuts/` keyboard-shortcut validation (+ validates shipped config) — **11 tests**
+**Feature logic modules (`src/`) — tested, engine-independent (~194 unit tests)**
+- `workspaces/` (20), `privacy/` aggregation — real data, never fabricates (16),
+  `search/` omnibox (23), `shortcuts/` validation (11)
+- `bookmarks/` tree (17), `history/` + frecency (14), `downloads/` state machine (20)
+- `permissions/` per-site (15), `exceptions/` scoped privacy exceptions (13)
+- `theme/` resolution (12), `profiles/` multi-profile + isolation (13)
+- `integration/` full-profile encrypted backup round-trip across all modules (9)
+- `npm test` / `bash tools/run-tests.sh` runs everything; CI runs it per push
 
 ## Decisions locked (2026-11-18)
 - **Upstream channel:** Firefox **ESR** (B3)

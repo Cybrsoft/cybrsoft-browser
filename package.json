@@ -1,0 +1,10 @@
+{
+  "name": "cybrsoft-browser-logic",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Build-independent feature logic + tooling for Cybrsoft Browser (the Firefox-fork browser itself is built separately; see docs/BUILD.md).",
+  "scripts": {
+    "test": "bash tools/run-tests.sh"
+  },
+  "license": "MPL-2.0"
+}
