@@ -67,8 +67,9 @@ spec §21. **No feature is listed as complete without executed tests.**
 - `permissions/` per-site (15), `exceptions/` scoped privacy exceptions (13)
 - `theme/` resolution (12), `profiles/` multi-profile + isolation (13)
 - `omnibox/` unified address-bar suggestions (11), `import/` Netscape bookmark import (11)
+- `session/` tab restoration + session snapshot/restore (14)
 - `integration/` full-profile encrypted backup round-trip across all modules (9)
-- **~216 unit tests across 15 modules.** `npm test` / `bash tools/run-tests.sh`
+- **~230 unit tests across 16 modules.** `npm test` / `bash tools/run-tests.sh`
   runs everything; CI runs it per push
 
 ## Decisions locked (2026-11-18)
