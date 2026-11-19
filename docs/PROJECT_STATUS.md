@@ -66,8 +66,10 @@ spec §21. **No feature is listed as complete without executed tests.**
 - `bookmarks/` tree (17), `history/` + frecency (14), `downloads/` state machine (20)
 - `permissions/` per-site (15), `exceptions/` scoped privacy exceptions (13)
 - `theme/` resolution (12), `profiles/` multi-profile + isolation (13)
+- `omnibox/` unified address-bar suggestions (11), `import/` Netscape bookmark import (11)
 - `integration/` full-profile encrypted backup round-trip across all modules (9)
-- `npm test` / `bash tools/run-tests.sh` runs everything; CI runs it per push
+- **~216 unit tests across 15 modules.** `npm test` / `bash tools/run-tests.sh`
+  runs everything; CI runs it per push
 
 ## Decisions locked (2026-11-18)
 - **Upstream channel:** Firefox **ESR** (B3)

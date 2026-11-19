@@ -29,17 +29,32 @@ distribution.
 | `extensions-bundled/` (uBlock Origin) | preinstalled add-on | **package**: verified `.xpi` into `browser/extensions/` |
 | `tools/backup/backup.mjs` | backup/export UI | packaged as a chrome module; backup UI calls `createBackup`/`restoreBackup`; **wire** profile read/write for the payload |
 
+## Tested logic already exists (`src/`)
+The core logic behind these features is **already written and unit-tested**
+(engine-independent). Wiring is mostly connecting these modules to the engine's
+data sources and the chrome UI — not writing the logic from scratch:
+
+| Feature | Tested module | Wire it to |
+|---------|--------------|-----------|
+| Privacy dashboard | `src/privacy/aggregate.mjs` | the content-blocking log + uBO logger |
+| Address bar | `src/omnibox/`, `src/search/` | the search service + history/bookmarks stores |
+| Workspaces | `src/workspaces/` | the tab/session model |
+| Bookmarks / history | `src/bookmarks/`, `src/history/` | the places DB |
+| Downloads | `src/downloads/` | the engine's download events |
+| Site permissions / exceptions | `src/permissions/`, `src/exceptions/` | the permission manager |
+| Theme / profiles | `src/theme/`, `src/profiles/` | prefs + profile dirs |
+| Import / backup | `src/import/`, `tools/backup/` | file picker + live profile read/write |
+
 ## The data-binding work (the honest gap)
 The UI prototypes render and interact, but their **live data and actions are
-stubbed**. Wiring each to the engine is where the remaining real work is:
-- **Privacy dashboard/panel** → read the content-blocking event log
-  (`nsIWebProgress` content-blocking flags) + uBlock Origin's logger; never
-  fabricate (ARCHITECTURE §6.4). Show "not available" if a datum can't be read.
-- **Settings** → bind each control to its Gecko pref; the profile segmented
-  control applies `prefs/profiles/<id>.js`.
-- **New tab / onboarding** → search via the engine's search service; onboarding
-  writes the chosen engine, profile, theme, tab layout on completion.
-- **Backup** → gather the `BACKUP_DOMAINS` from the live profile; apply on restore.
+stubbed**. Wiring each to the engine is the remaining real work:
+- **Privacy dashboard/panel** → feed `aggregate()` the content-blocking event log
+  (`nsIWebProgress` flags) + uBO's logger; never fabricate (ARCHITECTURE §6.4).
+- **Settings** → bind each control to its Gecko pref; the profile control applies
+  `prefs/profiles/<id>.js`.
+- **New tab / onboarding** → `src/omnibox` + the engine's search service;
+  onboarding writes the chosen engine/profile/theme/tab layout on completion.
+- **Backup** → `tools/backup` over the `BACKUP_DOMAINS` gathered from the live profile.
 
 ## Order of wiring (once B1 is up)
 1. Branding + prefs + autoconfig (smallest patches; validates the pipeline).

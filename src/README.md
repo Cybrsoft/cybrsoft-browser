@@ -18,9 +18,11 @@ compiler exists, and keeps the UI pages (`pages/`) thin.
 | `exceptions/` | Per-site privacy exceptions — scoped override + pause-with-expiry; never weakens other sites (§8) | 13 |
 | `theme/` | Theme resolution — system/light/dark + accent validation (§5) | 12 |
 | `profiles/` | Multi-profile registry + **isolation** guarantee (distinct data namespaces, §13) | 13 |
+| `omnibox/` | Address-bar suggestions — unifies history + bookmarks + search, deduped & ranked | 11 |
+| `import/` | Bookmark import — parses Netscape HTML (Firefox/Chrome/Edge/Safari), skips unsafe entries (§12) | 11 |
 | `integration/` | Full-profile **encrypted backup round-trip** across every module | 9 |
 
-Run all tests: `bash tools/run-tests.sh` or `npm test` (also run in CI). ~194 unit tests.
+Run all tests: `bash tools/run-tests.sh` or `npm test` (also run in CI). ~216 unit tests across 15 modules.
 
 ## How these connect to the UI
 The pages in `pages/` are standalone prototypes with inlined logic for previewing.
